@@ -1,0 +1,76 @@
+
+YADAHCRM.ai — COLD LAUNCH IMPLEMENTATION PLAN (DO-OR-DIE VERSION)
+
+=============================
+✅ MVP FEATURES TO IMPLEMENT
+=============================
+
+1. VOICE-TO-SUMMARY PIPELINE
+   - Record voice via browser (MediaRecorder API)
+   - Send to Whisper/OpenAI for transcription
+   - Output summary (3 bullets + follow-up question) via OpenAI GPT-4 API
+   - Save raw + summary to Supabase (linked to user/contact)
+
+2. CONTACT MEMORY
+   - Add/search contact manually
+   - Auto-suggest existing contacts by name/email/phone
+   - Each note must be linked to contact
+
+3. FOLLOW-UP REMINDERS
+   - After summary, suggest follow-up time
+   - Allow manual date/time override
+   - Store in `reminders` table
+   - Scheduled job runs every hour to email user if reminder time has passed
+
+4. BULLET SUMMARY UI
+   - Show contact with most recent note summary (3 bullets)
+   - Filter/sort by contact name or recent activity
+   - Mobile-first layout: tap = see latest, long-press = add new
+
+5. FAILSAFE MODE
+   - If voice fails: fallback to manual note field
+   - If reminder email fails: local banner alert in UI
+   - If contact not matched: prompt to create new
+
+=============================
+🧠 NON-NEGOTIABLE UX
+=============================
+
+- App must load in <2 sec
+- Voice-to-summary must return in <12 sec
+- Time to log a note = <60 seconds
+- Must work offline for draft notes
+
+=============================
+🧱 TECH STACK REQUIRED
+=============================
+
+- Frontend: React + Tailwind + Vite
+- Audio: MediaRecorder API (fallback: upload .mp3)
+- AI: OpenAI Whisper + GPT-4 API
+- Backend: Supabase (auth, db, storage)
+- Scheduler: Supabase Functions or cron job for reminders
+- Push/email: Supabase SMTP or Resend API
+
+=============================
+📁 REPO STRUCTURE
+=============================
+
+- src/components/Recorder.tsx
+- src/components/NoteForm.tsx
+- src/pages/Dashboard.tsx
+- src/services/openai.ts
+- src/services/reminder.ts
+- supabase/schema.sql
+- .env.example
+- README.md with usage instructions
+
+=============================
+💥 FINAL MANDATE
+=============================
+
+Build this as a working V1.
+Do not wait for investor feedback.
+Do not beautify.
+
+EXECUTE FUNCTION FIRST. FEELING CAN COME LATER.
