@@ -1,0 +1,1 @@
+const t=document.getElementById("root");if(t){const e=document.createElement("main");e.style.display="grid",e.style.placeItems="center",e.style.minHeight="100dvh",e.innerHTML="<h1>YadahCRM</h1><p>Production build is configured.</p>",t.appendChild(e)}

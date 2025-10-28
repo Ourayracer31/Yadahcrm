@@ -1,8 +1,18 @@
 {
   "name": "yadahcrm",
   "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview",
+    "analyze": "ANALYZE=1 vite build && (xdg-open dist/bundle-analysis.html || true)"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "vite-plugin-compression": "^0.5.1",
+    "typescript": "^5.6.3"
   }
 }
