@@ -1,0 +1,111 @@
+<div id="beelab-coach" class="beelab-coach beelab-collapsed" data-mode="teach" data-persona="cute" aria-live="polite">
+  <div class="beelab-avatar-handle" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle BeeLab Coach">
+    <div class="beelab-avatar-wrapper bee-avatar" data-persona="cute">
+      <div class="beelab-3d-shell" data-model-src="bee.glb">
+        <span class="bee-avatar-icon" aria-hidden="true">CU</span>
+        <span class="beelab-3d-placeholder">BeeLab Coach</span>
+      </div>
+      <div class="beelab-chat-bubble">Need a hand?</div>
+    </div>
+  </div>
+
+  <section class="beelab-panel" role="dialog" aria-modal="false" aria-labelledby="beelab-panel-title">
+    <header class="beelab-panel-header">
+      <div class="beelab-header-top">
+        <div>
+          <h2 id="beelab-panel-title">BeeLab Coach</h2>
+          <p id="beelab-panel-subtitle">Guiding your GoHighLevel workflow</p>
+        </div>
+        <button type="button" class="beelab-close" aria-label="Collapse assistant">&times;</button>
+      </div>
+      <div class="beelab-control-strip">
+        <div class="beelab-persona-bar" role="group" aria-label="Choose Bee persona">
+          <button type="button" class="beelab-persona-button" data-persona="contractor" aria-pressed="false">
+            <span class="bee-persona-icon" aria-hidden="true">CT</span>
+            <span class="beelab-sr-only">Contractor Bee</span>
+          </button>
+          <button type="button" class="beelab-persona-button" data-persona="pilot" aria-pressed="false">
+            <span class="bee-persona-icon" aria-hidden="true">PL</span>
+            <span class="beelab-sr-only">Pilot Bee</span>
+          </button>
+          <button type="button" class="beelab-persona-button" data-persona="cute" aria-pressed="true">
+            <span class="bee-persona-icon" aria-hidden="true">CU</span>
+            <span class="beelab-sr-only">Cute Bee</span>
+          </button>
+          <button type="button" class="beelab-persona-button" data-persona="glasses" aria-pressed="false">
+            <span class="bee-persona-icon" aria-hidden="true">GL</span>
+            <span class="beelab-sr-only">Bee with Glasses</span>
+          </button>
+        </div>
+        <div class="beelab-mode-switch" role="group" aria-label="Assistant Mode">
+          <button type="button" class="beelab-mode-button" data-mode="teach" aria-pressed="true">Teach</button>
+          <button type="button" class="beelab-mode-button" data-mode="do" aria-pressed="false">Do</button>
+        </div>
+        <button type="button" class="beelab-undo" disabled>Undo last</button>
+      </div>
+    </header>
+
+    <div class="beelab-panel-body">
+      <section class="beelab-quick-actions" aria-label="Quick actions">
+        <h3 class="beelab-quick-heading">Quick Actions</h3>
+        <div class="beelab-quick-grid">
+          <button type="button" class="beelab-quick-button" data-action="missedCallTextBack">
+            <span class="beelab-quick-title">Missed-Call Text-Back</span>
+            <span class="beelab-quick-caption">Recover leads automatically</span>
+          </button>
+          <button type="button" class="beelab-quick-button" data-action="quietHours">
+            <span class="beelab-quick-title">Quiet Hours</span>
+            <span class="beelab-quick-caption">Protect customer sleep time</span>
+          </button>
+          <button type="button" class="beelab-quick-button" data-action="reviewsOn">
+            <span class="beelab-quick-title">Reviews On</span>
+            <span class="beelab-quick-caption">Boost social proof</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="beelab-conversation" role="log" aria-live="polite">
+        <div class="beelab-message beelab-message--bee">
+          <strong>Bee:</strong>
+          <p>Hi there! I can walk you through GoHighLevel or lend a hand while you work. Ask me anything.</p>
+        </div>
+      </div>
+
+      <form class="beelab-input" novalidate>
+        <label class="beelab-input-label" for="beelab-user-prompt">Ask BeeLab Coach</label>
+        <div class="beelab-input-row">
+          <textarea id="beelab-user-prompt" name="prompt" rows="2" placeholder="Type a question or say 'BeeLab, help me with...'" aria-label="Message BeeLab Coach"></textarea>
+          <div class="beelab-input-actions">
+            <button type="button" class="beelab-voice" aria-pressed="false" title="Hold to speak with BeeLab">Mic</button>
+            <button type="submit" class="beelab-send" title="Send message">Send</button>
+          </div>
+        </div>
+        <p class="beelab-mode-hint">Teach mode = guided steps. Do mode = Bee assists or acts with your confirmation.</p>
+      </form>
+    </div>
+  </section>
+
+  <div class="beelab-confirm-bubble" data-visible="false" role="alertdialog" aria-live="assertive" aria-modal="false" aria-describedby="beelab-confirm-message">
+    <p id="beelab-confirm-message" class="beelab-confirm-text">Do you want me to click this?</p>
+    <div class="beelab-confirm-actions">
+      <button type="button" class="beelab-confirm-yes">Yes</button>
+      <button type="button" class="beelab-confirm-no">No</button>
+    </div>
+  </div>
+
+  <div class="beelab-toast-container" role="status" aria-live="polite"></div>
+</div>
+
+<template id="beelab-message-template">
+  <div class="beelab-message">
+    <strong class="beelab-message-speaker"></strong>
+    <p class="beelab-message-text"></p>
+  </div>
+</template>
+
+<template id="beelab-highlight-template">
+  <div class="beelab-highlight-overlay" role="presentation">
+    <div class="beelab-highlight-pulse"></div>
+    <div class="beelab-highlight-tooltip"></div>
+  </div>
+</template>
