@@ -334,6 +334,118 @@
   color: var(--beelab-text-inverse);
 }
 
+.beelab-undo {
+  border: none;
+  background: rgba(17, 24, 39, 0.12);
+  color: var(--beelab-text);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--beelab-transition), transform var(--beelab-transition), color var(--beelab-transition);
+}
+
+.beelab-undo:hover:not(:disabled) {
+  background: rgba(17, 24, 39, 0.2);
+  transform: translateY(-1px);
+}
+
+.beelab-undo:disabled,
+.beelab-undo[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.beelab-confirm-bubble {
+  position: absolute;
+  inset-block-end: 140px;
+  inset-inline-end: 24px;
+  max-inline-size: 240px;
+  background: var(--beelab-surface);
+  color: var(--beelab-text-inverse);
+  border-radius: 16px;
+  box-shadow: var(--beelab-shadow);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+  transition: opacity var(--beelab-transition), transform var(--beelab-transition);
+  opacity: 0;
+  transform: translateY(8px);
+  z-index: calc(var(--beelab-z-index) + 2);
+}
+
+.beelab-confirm-bubble[data-visible="false"] {
+  pointer-events: none;
+}
+
+.beelab-confirm-bubble[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.beelab-confirm-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.beelab-confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.beelab-confirm-actions button {
+  flex: 1 1 0;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--beelab-transition), color var(--beelab-transition);
+}
+
+.beelab-confirm-yes {
+  background: var(--beelab-primary);
+  color: var(--beelab-text);
+}
+
+.beelab-confirm-no {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--beelab-text-inverse);
+}
+
+.beelab-toast-container {
+  position: fixed;
+  inset-inline-end: 24px;
+  inset-block-end: 24px;
+  display: grid;
+  gap: 12px;
+  z-index: calc(var(--beelab-z-index) + 3);
+  pointer-events: none;
+}
+
+.beelab-toast {
+  background: var(--beelab-text);
+  color: var(--beelab-text-inverse);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.28);
+}
+
+.beelab-toast--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .beelab-panel-body {
   display: flex;
   flex-direction: column;

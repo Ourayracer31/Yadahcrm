@@ -318,7 +318,13 @@
         conversation: root.querySelector('.beelab-conversation'),
         promptForm: root.querySelector('.beelab-input'),
         promptInput: root.querySelector('#beelab-user-prompt'),
-        voiceButton: root.querySelector('.beelab-voice')
+        voiceButton: root.querySelector('.beelab-voice'),
+        confirmBubble: root.querySelector('.beelab-confirm-bubble'),
+        confirmMessage: root.querySelector('#beelab-confirm-message'),
+        confirmYes: root.querySelector('.beelab-confirm-yes'),
+        confirmNo: root.querySelector('.beelab-confirm-no'),
+        toastContainer: root.querySelector('.beelab-toast-container'),
+        undoButton: root.querySelector('.beelab-undo')
       };
 
       this.templates = {
@@ -339,6 +345,8 @@
       this.flightFallback = null;
       this.pendingPosition = null;
       this.activePulses = new Set();
+      this.pendingConfirmation = null;
+      this.lastAction = null;
 
       this.guide = new BeeGuide(this);
     }
@@ -352,6 +360,7 @@
       this.setMode(this.state.mode, { silent: true, skipSave: true });
       this.updatePersonaButtons();
       this.updateModeButtons();
+      this.updateUndoState();
       this.prepareModelSlot();
 
       const persona = PERSONAS[this.settings.persona] || PERSONAS.cute;
@@ -365,7 +374,10 @@
         modeButtons,
         personaButtons,
         promptForm,
-        voiceButton
+        voiceButton,
+        confirmYes,
+        confirmNo,
+        undoButton
       } = this.elements;
 
       if (avatarHandle) {
@@ -442,6 +454,18 @@
           startVoice();
         }, { passive: false });
         voiceButton.addEventListener('touchend', stopVoice);
+      }
+
+      if (confirmYes) {
+        confirmYes.addEventListener('click', () => this.resolveConfirmation(true));
+      }
+
+      if (confirmNo) {
+        confirmNo.addEventListener('click', () => this.resolveConfirmation(false));
+      }
+
+      if (undoButton) {
+        undoButton.addEventListener('click', () => this.undoLastAction());
       }
     }
 
@@ -810,7 +834,7 @@
       this.reveal();
       this.setMode('teach', { silent: true, skipSave: false });
       this.flyTo(element, { prefer: 'left' });
-      this.highlightElement(element, { message: entry.explainer, duration: 2800 });
+      this.highlightElement(element, entry.explainer, { duration: 2800 });
       this.spawnPagePulse(element);
       this.appendMessage('Bee', entry.explainer);
       return true;
@@ -834,6 +858,273 @@
         this.activePulses.delete(pulse);
       }, 2600);
       pulse.dataset.timer = String(timer);
+    }
+
+    wait(ms = 0) {
+      return new Promise((resolve) => window.setTimeout(resolve, ms));
+    }
+
+    showToast(message) {
+      const { toastContainer } = this.elements;
+      if (!toastContainer) {
+        return;
+      }
+      const toast = document.createElement('div');
+      toast.className = 'beelab-toast';
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.add('beelab-toast--show');
+      });
+      window.setTimeout(() => {
+        toast.classList.remove('beelab-toast--show');
+        window.setTimeout(() => {
+          toast.remove();
+        }, 240);
+      }, 2000);
+    }
+
+    requestConfirmation(message = 'Do you want me to click this?') {
+      const { confirmBubble, confirmMessage, confirmYes } = this.elements;
+      if (!confirmBubble || !this.elements.confirmYes || !this.elements.confirmNo) {
+        return Promise.resolve(true);
+      }
+
+      if (this.pendingConfirmation) {
+        this.resolveConfirmation(false);
+      }
+
+      confirmBubble.dataset.visible = 'true';
+      if (confirmMessage) {
+        confirmMessage.textContent = message;
+      }
+
+      return new Promise((resolve) => {
+        this.pendingConfirmation = { resolve };
+        window.setTimeout(() => {
+          if (confirmYes) {
+            confirmYes.focus({ preventScroll: true });
+          }
+        }, 25);
+      });
+    }
+
+    resolveConfirmation(result) {
+      const pending = this.pendingConfirmation;
+      this.pendingConfirmation = null;
+      const { confirmBubble } = this.elements;
+      if (confirmBubble) {
+        confirmBubble.dataset.visible = 'false';
+      }
+      if (pending) {
+        pending.resolve(Boolean(result));
+      }
+    }
+
+    updateUndoState() {
+      const { undoButton } = this.elements;
+      if (!undoButton) {
+        return;
+      }
+      const enabled = Boolean(this.lastAction);
+      undoButton.disabled = !enabled;
+      undoButton.setAttribute('aria-disabled', String(!enabled));
+    }
+
+    setLastAction(action) {
+      this.lastAction = action;
+      this.updateUndoState();
+    }
+
+    clearLastAction() {
+      this.lastAction = null;
+      this.updateUndoState();
+    }
+
+    undoLastAction() {
+      if (!this.lastAction) {
+        this.appendMessage('Bee', 'Nothing to undo yet. Try a Do action first.');
+        return;
+      }
+
+      const { previousFocus, selector } = this.lastAction;
+      let refocused = false;
+      if (previousFocus && typeof previousFocus.focus === 'function') {
+        try {
+          previousFocus.focus({ preventScroll: false });
+          refocused = true;
+        } catch (error) {
+          console.warn('[BeeLab Coach] Unable to focus previous element', error);
+        }
+      }
+
+      if (!refocused && selector) {
+        try {
+          const candidate = document.querySelector(selector);
+          if (candidate && typeof candidate.focus === 'function') {
+            candidate.focus({ preventScroll: false });
+            refocused = true;
+          }
+        } catch (error) {
+          console.warn('[BeeLab Coach] Undo selector lookup failed', error);
+        }
+      }
+
+      this.showToast(refocused ? 'Focus restored' : 'Undo queued');
+      this.appendMessage('Bee', 'Undo preview: I restored focus. Full reversal is coming soon.');
+      this.clearLastAction();
+    }
+
+    buildSelector(element) {
+      if (!(element instanceof Element)) {
+        return null;
+      }
+      if (element.id) {
+        return `#${element.id}`;
+      }
+      const dataTest = element.getAttribute('data-test');
+      if (dataTest) {
+        return `[data-test="${dataTest}"]`;
+      }
+      const name = element.getAttribute('name');
+      if (name) {
+        return `${element.tagName.toLowerCase()}[name="${name}"]`;
+      }
+      const role = element.getAttribute('role');
+      if (role) {
+        return `${element.tagName.toLowerCase()}[role="${role}"]`;
+      }
+      return element.tagName ? element.tagName.toLowerCase() : null;
+    }
+
+    isElementInViewport(element, tolerance = 8) {
+      if (!(element instanceof Element)) {
+        return false;
+      }
+      const rect = element.getBoundingClientRect();
+      if (!rect) {
+        return false;
+      }
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      return (
+        rect.bottom >= -tolerance &&
+        rect.right >= -tolerance &&
+        rect.top <= viewportHeight + tolerance &&
+        rect.left <= viewportWidth + tolerance
+      );
+    }
+
+    isElementDisabled(element) {
+      if (!(element instanceof Element)) {
+        return true;
+      }
+      if (typeof element.matches === 'function') {
+        try {
+          if (element.matches(':disabled')) {
+            return true;
+          }
+        } catch (error) {
+          // ignore selector errors for custom elements
+        }
+      }
+      return element.getAttribute('aria-disabled') === 'true';
+    }
+
+    async ensureElementReady(element) {
+      if (!element || !element.isConnected) {
+        return false;
+      }
+
+      if (!this.isElementReachable(element) || this.isElementDisabled(element)) {
+        return false;
+      }
+
+      if (!this.isElementInViewport(element)) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        await this.wait(420);
+      }
+
+      if (!this.isElementInViewport(element)) {
+        element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' });
+        await this.wait(200);
+      }
+
+      return this.isElementReachable(element) &&
+        !this.isElementDisabled(element) &&
+        this.isElementInViewport(element);
+    }
+
+    async safeClick(element, options = {}) {
+      if (!(element instanceof Element)) {
+        this.appendMessage('Bee', 'I could not find something to click.');
+        return false;
+      }
+
+      this.reveal();
+
+      const ready = await this.ensureElementReady(element);
+      if (!ready) {
+        this.appendMessage('Bee', 'I could not safely reach that element to click it.');
+        return false;
+      }
+
+      const confirmed = await this.requestConfirmation(options.confirmMessage || 'Do you want me to click this?');
+      if (!confirmed) {
+        this.appendMessage('Bee', 'Okay, I will stay put.');
+        return false;
+      }
+
+      const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+      try {
+        element.click();
+      } catch (error) {
+        console.error('[BeeLab Coach] Click failed', error);
+        this.appendMessage('Bee', 'Hmm, the page would not let me click that.');
+        return false;
+      }
+
+      this.showToast('Done');
+      const label = options.label ? options.label : 'that item';
+      this.appendMessage('Bee', `Done! Clicked ${label}.`);
+      this.setLastAction({
+        type: 'click',
+        selector: options.selector || this.buildSelector(element),
+        previousFocus
+      });
+      return true;
+    }
+
+    handleOpenCommand(topic) {
+      const entry = TEACH_MAP[topic];
+      if (!entry) {
+        this.appendMessage('Bee', `I do not know how to open ${topic} yet.`);
+        return;
+      }
+
+      if (this.state.mode !== 'do') {
+        this.appendMessage('Bee', 'Switch to Do mode so I can take that action for you.');
+        return;
+      }
+
+      const element = this.findTeachElement(entry);
+      if (!element) {
+        this.appendMessage('Bee', `I could not find ${topic} here. Navigate there and try again.`);
+        return;
+      }
+
+      this.appendMessage('Bee', `Preview ready. Confirm if you want me to open ${topic}.`);
+      this.flyTo(element, { prefer: 'left' });
+      this.highlightElement(element, `Ready to open ${topic}.`, { duration: 2400 });
+      this.spawnPagePulse(element);
+
+      (async () => {
+        await this.safeClick(element, {
+          label: topic,
+          selector: entry.selectorHints && entry.selectorHints.length ? entry.selectorHints[0] : this.buildSelector(element)
+        });
+      })();
     }
 
     toggleCollapse(force) {
@@ -982,6 +1273,13 @@
         return false;
       }
 
+      const openMatch = input.match(/^open\s+(settings|conversations|launchpad|sites|workflows|calendars|reviews)\b/i);
+      if (openMatch) {
+        const topic = openMatch[1].toLowerCase();
+        this.handleOpenCommand(topic);
+        return true;
+      }
+
       const personaMatch = input.match(/^persona\s+(contractor|pilot|cute|glasses)\b/i);
       if (personaMatch) {
         const personaName = personaMatch[1].toLowerCase();
@@ -1070,8 +1368,8 @@
       return false;
     }
 
-    highlightElement(target, options = {}) {
-      return this.guide.highlightElement(target, options.message || '', options);
+    highlightElement(target, message = '', options = {}) {
+      return this.guide.highlightElement(target, message, options);
     }
 
     startVoiceCapture() {
