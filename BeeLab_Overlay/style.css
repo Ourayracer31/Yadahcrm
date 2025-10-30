@@ -454,6 +454,61 @@
   overflow: hidden;
 }
 
+.beelab-quick-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.beelab-quick-heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+.beelab-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.beelab-quick-button {
+  border: none;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.14);
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform var(--beelab-transition), box-shadow var(--beelab-transition), background var(--beelab-transition);
+}
+
+.beelab-quick-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+}
+
+.beelab-quick-button:focus-visible {
+  outline: 3px solid rgba(255, 191, 0, 0.5);
+  outline-offset: 2px;
+}
+
+.beelab-quick-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--beelab-text);
+}
+
+.beelab-quick-caption {
+  font-size: 12px;
+  color: rgba(17, 24, 39, 0.6);
+}
+
 .beelab-conversation {
   flex: 1;
   overflow-y: auto;

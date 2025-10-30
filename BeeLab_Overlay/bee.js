@@ -68,6 +68,59 @@
       explainer: 'Reviews gathers testimonials and helps you request new ones seamlessly.'
     }
   };
+  const QUICK_ACTIONS = {
+    missedCallTextBack: {
+      label: 'Missed-Call Text-Back',
+      mat: {
+        why: 'Turn missed calls into conversations so prospects feel seen even after hours.',
+        what: 'Enable the missed-call text-back toggle, set the reply number, and craft the SMS that keeps the thread alive.',
+        how: 'In Settings → Phone, open the Missed Call Text Back card and switch the automation on.',
+        next: 'Once enabled, drop a test call and watch Conversations for the auto SMS to confirm delivery.'
+      },
+      doSteps: [
+        { teachKey: 'settings', label: 'Settings' },
+        {
+          selectorHints: ['[data-test="phone"]', 'a[href*="phone"]', 'button[data-menu="phone"]'],
+          textHints: ['phone'],
+          label: 'Phone'
+        }
+      ]
+    },
+    quietHours: {
+      label: 'Quiet Hours',
+      mat: {
+        why: 'Protect your brand by pausing calls and texts during the times clients need quiet.',
+        what: 'Define the quiet hour window, choose the days it applies, and confirm which numbers respect it.',
+        how: 'From Settings → Phone, open the Quiet Hours section and set the schedule boundaries.',
+        next: 'After saving, note the hours in your playbook so every workflow respects the same limits.'
+      },
+      doSteps: [
+        { teachKey: 'settings', label: 'Settings' },
+        {
+          selectorHints: ['[data-test="phone"]', 'a[href*="phone"]', 'button[data-menu="phone"]'],
+          textHints: ['phone'],
+          label: 'Phone'
+        }
+      ]
+    },
+    reviewsOn: {
+      label: 'Reviews On',
+      mat: {
+        why: 'Keep fresh social proof flowing so new leads trust you faster.',
+        what: 'Connect the review sources, enable request automations, and choose the sender profile.',
+        how: 'Jump into the Reviews module, open Settings, and toggle on the review requests.',
+        next: 'Schedule a weekly check on replies to celebrate wins and plug gaps quickly.'
+      },
+      doSteps: [
+        { teachKey: 'reviews', label: 'Reviews' },
+        {
+          selectorHints: ['[data-test="reviews-settings"]', 'a[href*="settings"]', 'button[data-tab="settings"]'],
+          textHints: ['settings'],
+          label: 'Reviews Settings'
+        }
+      ]
+    }
+  };
 
   if (window.__beeLabCoachInjected) {
     return;
@@ -315,6 +368,7 @@
         closeButton: root.querySelector('.beelab-close'),
         modeButtons: Array.from(root.querySelectorAll('.beelab-mode-button')),
         personaButtons: Array.from(root.querySelectorAll('.beelab-persona-button')),
+        quickButtons: Array.from(root.querySelectorAll('.beelab-quick-button')),
         conversation: root.querySelector('.beelab-conversation'),
         promptForm: root.querySelector('.beelab-input'),
         promptInput: root.querySelector('#beelab-user-prompt'),
@@ -373,6 +427,7 @@
         closeButton,
         modeButtons,
         personaButtons,
+        quickButtons,
         promptForm,
         voiceButton,
         confirmYes,
@@ -454,6 +509,17 @@
           startVoice();
         }, { passive: false });
         voiceButton.addEventListener('touchend', stopVoice);
+      }
+
+      if (quickButtons) {
+        quickButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const actionKey = button.dataset.action;
+            if (actionKey) {
+              this.handleQuickAction(actionKey);
+            }
+          });
+        });
       }
 
       if (confirmYes) {
@@ -1127,6 +1193,94 @@
       })();
     }
 
+    handleQuickAction(actionKey) {
+      const action = QUICK_ACTIONS[actionKey];
+      if (!action) {
+        this.appendMessage('Bee', 'That quick action is not wired yet, but I can still guide you manually.');
+        return;
+      }
+
+      if (this.state.mode === 'teach') {
+        this.performTeachLesson(actionKey, action);
+      } else {
+        void this.performDoNavigation(actionKey, action);
+      }
+    }
+
+    performTeachLesson(actionKey, action) {
+      const { label, mat, doSteps } = action;
+      if (!mat) {
+        this.appendMessage('Bee', `${label} is on my roadmap. I will add the full breakdown soon.`);
+        return;
+      }
+
+      this.appendMessage('Bee', `${label}: here is the 4MAT plan.`);
+      this.appendMessage('Bee', `Why: ${mat.why}`);
+      this.appendMessage('Bee', `What: ${mat.what}`);
+      this.appendMessage('Bee', `How: ${mat.how}`);
+      this.appendMessage('Bee', `Next: ${mat.next}`);
+
+      if (doSteps && doSteps.length) {
+        const firstStep = this.resolveQuickStep(doSteps[0]);
+        if (firstStep.element) {
+          this.flyTo(firstStep.element, { prefer: 'left' });
+          this.highlightElement(firstStep.element, mat.how, { duration: 3600 });
+          this.spawnPagePulse(firstStep.element);
+        }
+      }
+    }
+
+    async performDoNavigation(actionKey, action) {
+      const { label, doSteps } = action;
+      if (!doSteps || !doSteps.length) {
+        this.appendMessage('Bee', `${label} isn’t automated yet, but I can walk beside you if you click it manually.`);
+        return;
+      }
+
+      this.appendMessage('Bee', `Let me take you to ${label}. I will stick to the sidebar only.`);
+
+      for (const step of doSteps) {
+        const resolved = this.resolveQuickStep(step);
+        if (!resolved.element) {
+          this.appendMessage('Bee', `I could not spot ${step.label || 'that item'} on this page. Can you open it and then tap the tile again?`);
+          return;
+        }
+
+        const confirmation = `Click ${step.label || label}?`;
+        this.highlightElement(resolved.element, `Queued: ${step.label || label}`, { duration: 2400 });
+        this.spawnPagePulse(resolved.element);
+        const success = await this.safeClick(resolved.element, {
+          label: step.label || label,
+          selector: resolved.selector,
+          confirmMessage: confirmation
+        });
+
+        if (!success) {
+          return;
+        }
+
+        await this.wait(step.pause || 320);
+      }
+
+      this.appendMessage('Bee', 'I’m at the right spot—tell me what to fill next.');
+    }
+
+    resolveQuickStep(step) {
+      if (!step) {
+        return { element: null, selector: null };
+      }
+
+      let entry = step;
+      if (step.teachKey && TEACH_MAP[step.teachKey]) {
+        entry = TEACH_MAP[step.teachKey];
+      }
+
+      const element = this.findTeachElement(entry);
+      const selector = step.selector || (entry && entry.selectorHints && entry.selectorHints.length ? entry.selectorHints[0] : null);
+
+      return { element, selector };
+    }
+
     toggleCollapse(force) {
       const isCollapsed = this.root.classList.contains(COLLAPSED_CLASS);
       const shouldCollapse = typeof force === 'boolean' ? force : !isCollapsed;
@@ -1301,6 +1455,8 @@
       if (input === '/help') {
         const topics = this.getTeachTopics();
         this.appendMessage('Bee', `You can try teach ${topics.map((item) => item).join(', ')}.`);
+        const quickList = Object.values(QUICK_ACTIONS).map((action) => action.label).join(', ');
+        this.appendMessage('Bee', `Quick tiles: ${quickList}. Tap one or ask me to open a module in Do mode.`);
         return true;
       }
 
