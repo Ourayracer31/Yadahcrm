@@ -483,6 +483,19 @@
   box-shadow: 0 6px 12px rgba(15, 23, 42, 0.18);
 }
 
+.beelab-page-pulse {
+  position: absolute;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(255, 191, 0, 0.35);
+  border: 2px solid rgba(255, 191, 0, 0.9);
+  transform: translate(-50%, -50%);
+  animation: beelab-page-pulse 1.4s ease-out infinite;
+  z-index: calc(var(--beelab-z-index) - 5);
+}
+
 @keyframes beelab-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 191, 0, 0.35);
@@ -492,6 +505,21 @@
   }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 191, 0, 0);
+  }
+}
+
+@keyframes beelab-page-pulse {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  60% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
   }
 }
 

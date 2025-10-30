@@ -31,6 +31,43 @@
       greeting: 'Specs on. I\'ll keep the details crisp and clear.'
     }
   };
+  const TEACH_MAP = {
+    settings: {
+      selectorHints: ['[data-test="settings"]', 'a[href*="settings"]', 'nav a[href*="settings"]'],
+      textHints: ['settings'],
+      explainer: 'Open Settings to manage numbers, quiet hours, and defaults.'
+    },
+    conversations: {
+      selectorHints: ['[data-test="conversations"]', 'a[href*="conversations"]'],
+      textHints: ['conversations'],
+      explainer: 'Conversations keeps every message thread in one place for your team.'
+    },
+    launchpad: {
+      selectorHints: ['[data-test="launchpad"]', 'a[href*="launchpad"]'],
+      textHints: ['launchpad'],
+      explainer: 'Launchpad shows quick-start tiles so new accounts get value fast.'
+    },
+    sites: {
+      selectorHints: ['[data-test="sites"]', 'a[href*="funnels"]', 'a[href*="websites"]'],
+      textHints: ['sites', 'funnels'],
+      explainer: 'Sites is where you build funnels, websites, and landing pages.'
+    },
+    workflows: {
+      selectorHints: ['[data-test="workflows"]', 'a[href*="workflows"]'],
+      textHints: ['workflows', 'automations'],
+      explainer: 'Workflows automate follow-up, tasks, and complex customer journeys.'
+    },
+    calendars: {
+      selectorHints: ['[data-test="calendars"]', 'a[href*="calendars"]'],
+      textHints: ['calendars', 'calendar'],
+      explainer: 'Calendars manages booking pages, availability, and appointment routing.'
+    },
+    reviews: {
+      selectorHints: ['[data-test="reviews"]', 'a[href*="reviews"]'],
+      textHints: ['reviews'],
+      explainer: 'Reviews gathers testimonials and helps you request new ones seamlessly.'
+    }
+  };
 
   if (window.__beeLabCoachInjected) {
     return;
@@ -301,6 +338,7 @@
       this.activeFlight = null;
       this.flightFallback = null;
       this.pendingPosition = null;
+      this.activePulses = new Set();
 
       this.guide = new BeeGuide(this);
     }
@@ -702,6 +740,102 @@
       };
     }
 
+    findTeachElement(entry) {
+      if (!entry) {
+        return null;
+      }
+      const selectors = Array.isArray(entry.selectorHints) ? entry.selectorHints : [];
+      for (const selector of selectors) {
+        if (!selector) {
+          continue;
+        }
+        let candidate = null;
+        try {
+          candidate = document.querySelector(selector);
+        } catch (error) {
+          console.warn('[BeeLab Coach] Invalid teach selector', selector, error);
+        }
+        if (candidate && this.isElementReachable(candidate)) {
+          return candidate;
+        }
+      }
+
+      const textHints = Array.isArray(entry.textHints) ? entry.textHints : [];
+      for (const hint of textHints) {
+        const found = queryByText(hint);
+        if (found && this.isElementReachable(found)) {
+          return found;
+        }
+      }
+
+      return null;
+    }
+
+    isElementReachable(element) {
+      if (!(element instanceof Element)) {
+        return false;
+      }
+      const rect = element.getBoundingClientRect();
+      if (!rect || rect.width === 0 || rect.height === 0) {
+        return false;
+      }
+      const style = window.getComputedStyle(element);
+      if (style.visibility === 'hidden' || style.display === 'none') {
+        return false;
+      }
+      return true;
+    }
+
+    getTeachTopics() {
+      return Object.keys(TEACH_MAP);
+    }
+
+    teach(topicRaw) {
+      if (!topicRaw) {
+        return false;
+      }
+      const topic = topicRaw.toLowerCase();
+      const entry = TEACH_MAP[topic];
+      if (!entry) {
+        this.appendMessage('Bee', `I do not have a Teach walkthrough for "${topic}" yet. Try /help.`);
+        return false;
+      }
+
+      const element = this.findTeachElement(entry);
+      if (!element) {
+        this.appendMessage('Bee', `I could not find ${topic} on this screen. Navigate there and try again.`);
+        return false;
+      }
+
+      this.reveal();
+      this.setMode('teach', { silent: true, skipSave: false });
+      this.flyTo(element, { prefer: 'left' });
+      this.highlightElement(element, { message: entry.explainer, duration: 2800 });
+      this.spawnPagePulse(element);
+      this.appendMessage('Bee', entry.explainer);
+      return true;
+    }
+
+    spawnPagePulse(target) {
+      const rect = target instanceof Element ? target.getBoundingClientRect() : target;
+      if (!rect) {
+        return;
+      }
+      const pulse = document.createElement('div');
+      pulse.className = 'beelab-page-pulse';
+      const top = rect.top + window.scrollY + rect.height / 2;
+      const left = rect.left + window.scrollX + rect.width / 2;
+      pulse.style.top = `${top}px`;
+      pulse.style.left = `${left}px`;
+      document.body.appendChild(pulse);
+      this.activePulses.add(pulse);
+      const timer = window.setTimeout(() => {
+        pulse.remove();
+        this.activePulses.delete(pulse);
+      }, 2600);
+      pulse.dataset.timer = String(timer);
+    }
+
     toggleCollapse(force) {
       const isCollapsed = this.root.classList.contains(COLLAPSED_CLASS);
       const shouldCollapse = typeof force === 'boolean' ? force : !isCollapsed;
@@ -863,6 +997,35 @@
         } else {
           this.appendMessage('Bee', 'I do not have that persona yet.');
         }
+        return true;
+      }
+
+      if (input === '/help') {
+        const topics = this.getTeachTopics();
+        this.appendMessage('Bee', `You can try teach ${topics.map((item) => item).join(', ')}.`);
+        return true;
+      }
+
+      const teachMatch = input.match(/^teach\s+([a-z0-9\-\s]+)$/i);
+      if (teachMatch) {
+        const topic = teachMatch[1].trim().toLowerCase().replace(/\s+/g, ' ');
+        if (!topic) {
+          this.appendMessage('Bee', 'Tell me what to teach, like "teach workflows".');
+          return true;
+        }
+        const canonical = topic.replace(/\s+/g, '');
+        const teachTarget = this.getTeachTopics().find((name) => (
+          name === canonical ||
+          name === topic ||
+          topic.includes(name) ||
+          name.includes(canonical) ||
+          canonical.includes(name)
+        ));
+        if (!teachTarget) {
+          this.appendMessage('Bee', `I do not have that teach script yet. Type /help to see options.`);
+          return true;
+        }
+        this.teach(teachTarget);
         return true;
       }
 
