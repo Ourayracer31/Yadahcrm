@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "BeeLab Coach",
+  "description": "Overlay assistant for GoHighLevel that guides users with a Bee avatar.",
+  "version": "0.1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.gohighlevel.com/*",
+        "https://*.gohighlevel.com/*"
+      ],
+      "js": ["bee.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["bee.html", "style.css", "bee.glb"],
+      "matches": [
+        "https://app.gohighlevel.com/*",
+        "https://*.gohighlevel.com/*"
+      ]
+    }
+  ],
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://app.gohighlevel.com/*",
+    "https://*.gohighlevel.com/*"
+  ]
+}

@@ -1,0 +1,59 @@
+<div id="beelab-coach" class="beelab-coach beelab-collapsed" data-mode="teach" aria-live="polite">
+  <div class="beelab-avatar-handle" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle BeeLab Coach">
+    <div class="beelab-avatar-wrapper">
+      <div class="beelab-3d-shell" data-model-src="bee.glb">
+        <span class="beelab-3d-placeholder">BeeLab Coach</span>
+      </div>
+      <div class="beelab-chat-bubble">Need a hand?</div>
+    </div>
+  </div>
+
+  <section class="beelab-panel" role="dialog" aria-modal="false" aria-labelledby="beelab-panel-title">
+    <header class="beelab-panel-header">
+      <div>
+        <h2 id="beelab-panel-title">BeeLab Coach</h2>
+        <p id="beelab-panel-subtitle">Guiding your GoHighLevel workflow</p>
+      </div>
+      <div class="beelab-mode-switch" role="group" aria-label="Assistant Mode">
+        <button type="button" class="beelab-mode-button" data-mode="teach" aria-pressed="true">Teach</button>
+        <button type="button" class="beelab-mode-button" data-mode="do" aria-pressed="false">Do</button>
+      </div>
+      <button type="button" class="beelab-close" aria-label="Collapse assistant">&times;</button>
+    </header>
+
+    <div class="beelab-panel-body">
+      <div class="beelab-conversation" role="log" aria-live="polite">
+        <div class="beelab-message beelab-message--bee">
+          <strong>Bee:</strong>
+          <p>Hi there! I can walk you through GoHighLevel or lend a hand while you work. Ask me anything.</p>
+        </div>
+      </div>
+
+      <form class="beelab-input" novalidate>
+        <label class="beelab-input-label" for="beelab-user-prompt">Ask BeeLab Coach</label>
+        <div class="beelab-input-row">
+          <textarea id="beelab-user-prompt" name="prompt" rows="2" placeholder="Type a question or say 'BeeLab, help me with...'" aria-label="Message BeeLab Coach"></textarea>
+          <div class="beelab-input-actions">
+            <button type="button" class="beelab-voice" aria-pressed="false" title="Hold to speak with BeeLab">Mic</button>
+            <button type="submit" class="beelab-send" title="Send message">Send</button>
+          </div>
+        </div>
+        <p class="beelab-mode-hint">Teach mode = guided steps. Do mode = Bee assists or acts with your confirmation.</p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<template id="beelab-message-template">
+  <div class="beelab-message">
+    <strong class="beelab-message-speaker"></strong>
+    <p class="beelab-message-text"></p>
+  </div>
+</template>
+
+<template id="beelab-highlight-template">
+  <div class="beelab-highlight-overlay" role="presentation">
+    <div class="beelab-highlight-pulse"></div>
+    <div class="beelab-highlight-tooltip"></div>
+  </div>
+</template>

@@ -1,0 +1,371 @@
+:root {
+  --beelab-primary: #ffb400;
+  --beelab-secondary: #ffec9f;
+  --beelab-surface: rgba(17, 24, 39, 0.96);
+  --beelab-surface-light: #fefaf1;
+  --beelab-border: rgba(255, 196, 51, 0.4);
+  --beelab-text: #111827;
+  --beelab-text-inverse: #ffffff;
+  --beelab-radius: 16px;
+  --beelab-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+  --beelab-transition: 180ms ease;
+  --beelab-z-index: 2147483645;
+}
+
+.beelab-coach {
+  position: fixed;
+  inset-block-end: 24px;
+  inset-inline-end: 24px;
+  z-index: var(--beelab-z-index);
+  display: grid;
+  grid-template-columns: auto;
+  gap: 12px;
+  max-inline-size: min(360px, 92vw);
+  color: var(--beelab-text);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  pointer-events: none;
+}
+
+.beelab-coach * {
+  box-sizing: border-box;
+}
+
+.beelab-avatar-handle {
+  pointer-events: auto;
+  cursor: grab;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  inline-size: 96px;
+  block-size: 96px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  position: relative;
+  outline: none;
+}
+
+.beelab-avatar-handle:focus-visible {
+  box-shadow: 0 0 0 4px rgba(255, 180, 0, 0.45);
+}
+
+.beelab-avatar-handle:active {
+  cursor: grabbing;
+}
+
+.beelab-avatar-wrapper {
+  position: relative;
+  inline-size: 80px;
+  block-size: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff6d9 0%, #ffd166 45%, #ffaf10 90%);
+  box-shadow: 0 12px 18px rgba(15, 23, 42, 0.24);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: transform var(--beelab-transition), box-shadow var(--beelab-transition);
+}
+
+.beelab-coach:not(.beelab-collapsed) .beelab-avatar-wrapper {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 18px 26px rgba(15, 23, 42, 0.28);
+}
+
+.beelab-3d-shell {
+  inline-size: 72px;
+  block-size: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  color: #a16207;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px;
+}
+
+.beelab-3d-shell::after {
+  content: "3D model coming soon";
+  display: block;
+  font-size: 10px;
+  color: rgba(17, 24, 39, 0.6);
+  margin-block-start: 4px;
+}
+
+.beelab-chat-bubble {
+  position: absolute;
+  inset-block-end: 90%;
+  inset-inline-end: 90%;
+  translate: 50% -10px;
+  background: var(--beelab-surface);
+  color: var(--beelab-text-inverse);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.18);
+  transition: opacity var(--beelab-transition);
+}
+
+.beelab-coach:not(.beelab-collapsed) .beelab-chat-bubble {
+  opacity: 0;
+}
+
+.beelab-panel {
+  pointer-events: auto;
+  inline-size: clamp(280px, 32vw, 360px);
+  min-block-size: 280px;
+  max-block-size: min(60vh, 420px);
+  display: flex;
+  flex-direction: column;
+  background: var(--beelab-surface-light);
+  border-radius: var(--beelab-radius);
+  border: 1px solid var(--beelab-border);
+  box-shadow: var(--beelab-shadow);
+  overflow: hidden;
+  transition: opacity var(--beelab-transition), transform var(--beelab-transition);
+}
+
+.beelab-collapsed .beelab-panel {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  pointer-events: none;
+}
+
+.beelab-panel-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  background: var(--beelab-primary);
+  padding: 16px;
+  color: var(--beelab-text);
+}
+
+.beelab-panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.beelab-panel-header p {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(17, 24, 39, 0.76);
+}
+
+.beelab-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.beelab-mode-button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.7);
+  cursor: pointer;
+  transition: background var(--beelab-transition), color var(--beelab-transition);
+}
+
+.beelab-mode-button[aria-pressed="true"] {
+  background: var(--beelab-text);
+  color: var(--beelab-text-inverse);
+}
+
+.beelab-close {
+  border: none;
+  background: rgba(17, 24, 39, 0.12);
+  color: var(--beelab-text);
+  font-size: 18px;
+  line-height: 1;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background var(--beelab-transition), transform var(--beelab-transition);
+}
+
+.beelab-close:hover {
+  background: rgba(17, 24, 39, 0.2);
+  transform: rotate(90deg);
+}
+
+.beelab-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.beelab-conversation {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-inline-end: 4px;
+}
+
+.beelab-message {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  background: rgba(17, 24, 39, 0.03);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.beelab-message strong {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+.beelab-message--bee {
+  background: rgba(255, 191, 0, 0.18);
+}
+
+.beelab-input {
+  display: grid;
+  gap: 8px;
+}
+
+.beelab-input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+.beelab-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+#beelab-user-prompt {
+  width: 100%;
+  min-height: 48px;
+  resize: vertical;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border var(--beelab-transition), box-shadow var(--beelab-transition);
+}
+
+#beelab-user-prompt:focus {
+  border-color: rgba(255, 191, 0, 0.8);
+  box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.28);
+  outline: none;
+}
+
+.beelab-input-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.beelab-input-actions button {
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  transition: transform var(--beelab-transition), box-shadow var(--beelab-transition);
+}
+
+.beelab-voice {
+  background: rgba(255, 191, 0, 0.15);
+}
+
+.beelab-voice[aria-pressed="true"] {
+  background: rgba(4, 120, 87, 0.16);
+  box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.24);
+}
+
+.beelab-send {
+  background: var(--beelab-primary);
+  box-shadow: 0 6px 12px rgba(255, 191, 0, 0.28);
+}
+
+.beelab-input-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.beelab-mode-hint {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(17, 24, 39, 0.56);
+}
+
+.beelab-highlight-overlay {
+  position: absolute;
+  border: 2px solid rgba(255, 191, 0, 0.75);
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.25);
+  pointer-events: none;
+  animation: beelab-pulse 2s infinite;
+}
+
+.beelab-highlight-pulse {
+  position: absolute;
+  inset: -12px;
+  border: 2px solid rgba(255, 191, 0, 0.2);
+  border-radius: inherit;
+}
+
+.beelab-highlight-tooltip {
+  position: absolute;
+  inset-block-start: -36px;
+  inset-inline-start: 0;
+  translate: 0 -8px;
+  background: var(--beelab-surface);
+  color: var(--beelab-text-inverse);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.18);
+}
+
+@keyframes beelab-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 191, 0, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(255, 191, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 191, 0, 0);
+  }
+}
+
+@media (max-width: 680px) {
+  .beelab-coach {
+    inset-block-end: 12px;
+    inset-inline-end: 12px;
+    max-inline-size: 92vw;
+  }
+
+  .beelab-panel {
+    inline-size: clamp(260px, 80vw, 92vw);
+    max-block-size: 65vh;
+  }
+}
