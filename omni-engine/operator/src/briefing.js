@@ -53,6 +53,7 @@ export function buildBriefing(opp, { scores, composite, priority, fieldCheck, de
 
   // 8. Deal path if interest confirmed
   const dealPath = {
+    'Created Chain (Land+Builder+Capital)': 'Option the landowner\'s lot (net-to-seller, full role disclosure), assign to the builder for a transparent finder fee, with the BTR investor pre-committed to the finished door(s) - one created chain, three parties.',
     'Margin Squeeze': 'Option the infill lot (net-to-seller), assign to the builder for a transparent finder fee; builder builds duplex on city pre-approved plans.',
     'Liquidity Bailout': 'Introduce the builder\'s aging specs to the confirmed BTR investor; transparent per-door finder fee at turnkey.',
     'Capital Preservation': 'Secure a 120-day option on the premium lot; builder markets build-to-suit; paid at retail closing.',
@@ -66,9 +67,22 @@ export function buildBriefing(opp, { scores, composite, priority, fieldCheck, de
       ? `Proceed with caution - verify first: ${dealEval.reasons[0] || ''}`.trim()
       : `Make the call. Open with curiosity (see angle), listen for pain, book a follow-up if real.`;
 
+  // Creation provenance (Module: synthesis). When present, this opportunity was
+  // CREATED by combining People/Timing/Capital/Land - not discovered. Surface the
+  // thesis, the conditions to make true, and the catalyst move.
+  const creation = opp.synthesis ? {
+    created: true,
+    thesis: opp.synthesis.creationThesis,
+    conditions: opp.synthesis.creationConditions || [],
+    catalyst: opp.synthesis.catalyst,
+    synthesisScore: opp.synthesis.synthesisScore,
+    primitives: opp.synthesis.primitiveScores,
+  } : null;
+
   const briefing = {
     contact,                                                   // 1
     whyMatters: opp.rationale || `${contact.name} sits at a ${opp.play} opportunity worth a conversation.`, // 2
+    creation,                                                  // creation provenance (synthesis)
     pain,                                                      // 3
     likelyOpportunity: `${opp.play} - ${opp.fee?.note || 'structured option + transparent finder fee.'}`,   // 4
     doNotSay,                                                  // 5
@@ -88,12 +102,21 @@ export function buildBriefing(opp, { scores, composite, priority, fieldCheck, de
 /** Render the briefing as a one-page plain-text brief in the operator's voice. */
 export function renderBriefing(briefing) {
   const c = briefing.confidence || {};
+  const creationLines = briefing.creation ? [
+    `>> CREATED OPPORTUNITY (not discovered) — synthesis score ${briefing.creation.synthesisScore}/10`,
+    `   Thesis: ${briefing.creation.thesis}`,
+    `   Conditions to make true:`,
+    ...briefing.creation.conditions.map((c) => `     - ${c}`),
+    `   Catalyst: ${briefing.creation.catalyst}`,
+  ] : [];
+
   const lines = [
     `OPERATOR BRIEFING — SUGGESTED FOR TRAVIS`,
     `(recommendation only; Travis decides contact, angle, and whether to pursue)`,
     ``,
     `1. CONTACT: ${briefing.contact.name} (${briefing.contact.type})`,
     `2. WHY THIS MATTERS: ${briefing.whyMatters}`,
+    ...creationLines,
     `3. LIKELY PAIN: ${briefing.pain}`,
     `4. LIKELY OPPORTUNITY: ${briefing.likelyOpportunity}`,
     `5. DO NOT SAY:`,

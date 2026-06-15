@@ -44,6 +44,10 @@ function toOpportunity(match) {
     rationale: match.rationale || '',
     parties: match.parties || {},
     baseScore: match.score ?? null,
+    // Carry the creation provenance through when the opportunity was synthesized
+    // (created by combining People/Timing/Capital/Land) rather than pair-matched.
+    synthesis: match.synthesis || null,
+    origin: match.origin || 'matched',
   };
 }
 

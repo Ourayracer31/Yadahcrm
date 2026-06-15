@@ -3,7 +3,7 @@
  * Proves everything routes through the Operator Intelligence Layer.
  * Run: node test/demo.js
  */
-import { runMatches } from '../../matching/src/match.js';
+import { runSynthesis } from '../../synthesis/src/index.js';
 import { runOperatorLayer, renderWarRoom, renderBriefing, RelationshipMemory } from '../src/index.js';
 import { generateDealPacket, dealFromMatch } from '../../contracts/src/index.js';
 import { applyDecision } from '../src/decision.js';
@@ -34,9 +34,10 @@ const buyers = [
   { displayName: 'BTR Capital LLC', totalHoldings: 40, recentAcquisitions: 12, mailingState: 'TX' },
 ];
 
-// --- 1) MATCHING ---
-const matches = runMatches({ builders, lots, buyers });
-console.log(`Matching produced ${matches.length} raw matches.\n`);
+// --- 1) SYNTHESIS (create opportunities; never assume discovery) ---
+const matches = runSynthesis({ builders, lots, buyers });
+console.log(`Synthesis CREATED ${matches.length} opportunities by combining People/Timing/Capital/Land.`);
+console.log(`(every one is origin:"synthesized", discovered:false)\n`);
 
 // --- 2) RELATIONSHIP MEMORY (warm one contact) ---
 const memory = new RelationshipMemory();

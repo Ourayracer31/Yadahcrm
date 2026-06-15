@@ -91,6 +91,9 @@ export function profitPotentialScore(fee) {
  */
 export function operatorFitScore({ play, builder, fieldCheck }) {
   const base = {
+    // The created multi-leg chain is the most operator-intensive: it needs
+    // construction judgment AND orchestration across three parties. Rate it top.
+    'Created Chain (Land+Builder+Capital)': 9,
     'Margin Squeeze': 8,
     'Capital Preservation': 8,
     'Pipeline Drought': 8,
