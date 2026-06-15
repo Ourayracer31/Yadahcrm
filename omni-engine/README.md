@@ -41,6 +41,7 @@ private-system access, no writes to county systems.
 | `operator/` | **Operator Intelligence Layer** — briefings, pain-first scoring, field-reality, deal-killer, reverse-selling scripts, relationship memory, daily war room, 30-contact OS; trust-first language + human-final-decision | 53 passing |
 | `contact-memory/` | **Relationship Intelligence System** — permanent per-contact markdown files (`/contacts/**`), append-only history, builder/landowner/investor/partner templates, daily follow-up board, Field Reality Rule | 32 passing |
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
+| `routing/` | **n8n / webhook routing layer** — pushes operator output + daily board to CRM dashboards; internal-only (never auto-contacts a lead) | 19 passing |
 
 ## The four Plays (matching engine)
 

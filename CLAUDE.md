@@ -59,6 +59,10 @@ Downstream of the vectors:
 - **Contract generators** → `omni-engine/contracts/` — Exclusive Option to Purchase
   + Assignment & Finder's Fee, with the mandated disclosure clauses and a hard
   "no Wholesale" compliance guard.
+- **n8n / webhook routing layer** → `omni-engine/routing/` — the final box: pushes
+  operator intelligence + the daily board into Travis's CRM dashboards. Internal-
+  only by construction (`outreach:false`, `audience:"travis-dashboard"`); never
+  auto-contacts a lead. Channel routing + retry/backoff over a pluggable transport.
 
 ## Pain-Point matching plays (how scraped data is routed)
 
