@@ -1,0 +1,12 @@
+{
+  "name": "omni-engine-operator",
+  "version": "0.1.0",
+  "description": "Operator Intelligence Layer - reconnaissance, filtering and preparation system that turns Vector A/B/C + matching output into field-ready intelligence for Travis Manley. AI finds the conversations worth having; the operator creates the opportunity.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": { "omni-operator": "src/cli.js" },
+  "scripts": {
+    "test": "node test/operator.test.js",
+    "demo": "node test/demo.js"
+  }
+}
