@@ -1,0 +1,41 @@
+{
+  "title": "Vector C: Capital Sweep - Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "sources": {
+      "title": "County assessor/sales sources (ArcGIS)",
+      "type": "array",
+      "description": "Each county parcel/sales ArcGIS query layer carrying owner name, land-use, and sale date. Verify endpoints + fields before production.",
+      "editor": "json",
+      "prefill": [
+        {
+          "county": "Jackson (KCMO)",
+          "queryUrl": "https://gis.jacksongov.org/arcgis/rest/services/Parcels/MapServer/0/query",
+          "where": "SALE_DATE >= DATE '2024-06-01'",
+          "fieldMap": {
+            "ownerName": "OWNER_NAME",
+            "ownerMailingAddress": "MAIL_ADDR",
+            "ownerMailingState": "MAIL_STATE",
+            "situsAddress": "SITUS_ADDR",
+            "landUse": "LAND_USE",
+            "saleDate": "SALE_DATE",
+            "salePrice": "SALE_PRICE"
+          }
+        }
+      ]
+    },
+    "windowMonths": { "title": "Acquisition window (months)", "type": "integer", "default": 24 },
+    "minRecentBuys": { "title": "Min SFH bought in window", "type": "integer", "default": 5 },
+    "sfhLandUseCodes": {
+      "title": "Single-family land-use codes",
+      "type": "array",
+      "editor": "stringList",
+      "prefill": ["SFR", "SINGLE", "R1", "1010", "1100"]
+    },
+    "pageSize": { "title": "Page size", "type": "integer", "default": 1000 },
+    "maxRecordsPerCounty": { "title": "Max records per county", "type": "integer", "default": 100000 },
+    "webhookUrl": { "title": "n8n / CRM webhook URL", "type": "string", "editor": "textfield" }
+  },
+  "required": ["sources"]
+}
