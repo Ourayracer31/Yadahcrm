@@ -36,6 +36,14 @@ Downstream of the vectors:
 
 - **Pain-Point matching engine** → `omni-engine/matching/` — routes A/B/C leads
   into the four Plays (pure, deterministic, unit-tested).
+- **Operator Intelligence Layer** → `omni-engine/operator/` — **the spine every
+  other module routes through.** Turns raw matches into field-ready intelligence
+  for Travis Manley: operator briefings, pain-first scoring (Operator Fit gates),
+  field-reality checks, deal-killer logic, reverse-selling scripts, relationship
+  memory, the daily war room, and the 30-contact OS. Enforces trust-first
+  language (no wholesaler/hype vocabulary) and human-final-decision (nothing
+  auto-sends; only Travis decides). *AI finds the conversations; Travis creates
+  the opportunity.*
 - **Contract generators** → `omni-engine/contracts/` — Exclusive Option to Purchase
   + Assignment & Finder's Fee, with the mandated disclosure clauses and a hard
   "no Wholesale" compliance guard.

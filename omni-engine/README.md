@@ -9,13 +9,20 @@ private-system access, no writes to county systems.
 ## Pipeline
 
 ```
-  PUBLIC RECORDS                 INGESTION (Apify actors)            ROUTING            OUTPUT
-  ─────────────                  ────────────────────────           ───────            ──────
-  county permits ───────────▶  Vector A  Builder Health Sweep ─┐
-  county tax/GIS/zoning ─────▶  Vector B  The Dirt Sweep ───────┼──▶  matching/  ──▶  contracts/  ──▶  n8n / CRM
-  assessor/recorder sales ──▶  Vector C  Capital Sweep ────────┘   (4 Plays)        (Option +        (webhook)
-                                                                                      Assignment)
+  PUBLIC RECORDS              INGESTION (Apify actors)        ROUTING        OPERATOR LAYER       OUTPUT
+  ─────────────               ────────────────────────        ───────        ──────────────       ──────
+  county permits ─────────▶  Vector A Builder Health ─┐
+  county tax/GIS/zoning ──▶  Vector B The Dirt Sweep ─┼─▶ matching/ ─▶ operator/ ───────────▶ contracts/ ─▶ n8n/CRM
+  assessor/recorder ──────▶  Vector C Capital Sweep ──┘   (4 Plays)   (briefings, scoring,    (Option +     (webhook)
+                                                                       field-check, war room,  Assignment)
+                                                                       deal-killer, scripts,
+                                                                       memory, 30-contact OS)
 ```
+
+> **The Operator Intelligence Layer (`operator/`) is the spine.** Every other
+> module feeds it; it turns raw matches into field-ready, scored, human-decided
+> intelligence for Travis Manley. *AI finds the conversations worth having;
+> Travis creates the opportunity.*
 
 ## Modules
 
@@ -25,6 +32,7 @@ private-system access, no writes to county systems.
 | `vector-b-dirt-sweep/` | Multi-family/infill lots (R-2.5/R-3/R-4…) + 10–40 ac tracts; out-of-state, vacant, equity proxy | 16 passing |
 | `vector-c-capital-sweep/` | BTR buyer list: LLCs buying 5+ SFH / 24 mo | logic verified |
 | `matching/` | Routes A/B/C leads into the 4 Plays with disclosed fee math | 14 passing |
+| `operator/` | **Operator Intelligence Layer** — briefings, pain-first scoring, field-reality, deal-killer, reverse-selling scripts, relationship memory, daily war room, 30-contact OS; trust-first language + human-final-decision | 53 passing |
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
 
 ## The four Plays (matching engine)
