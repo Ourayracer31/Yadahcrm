@@ -28,9 +28,17 @@ This is a **Data Broker / procurement-finder** business, not a wholesaler.
 
 | Vector | Name | Target | Status |
 |--------|------|--------|--------|
-| A | Builder Health Sweep | Mid-market builders (5–50 permits/yr); spec DOM & price drops | planned |
+| **A** | **Builder Health Sweep** | Mid-market builders (5–50 permits/yr); spec DOM & price drops | **built** → `omni-engine/vector-a-builder-health/` |
 | **B** | **The Dirt Sweep** | Multi-family/infill-zoned lots (KCMO/KCK) + 10–40 ac exurban tracts | **built** → `omni-engine/vector-b-dirt-sweep/` |
-| C | Capital Sweep | LLCs buying 5+ SFH in 24 mo (BTR buyer list) | planned |
+| **C** | **Capital Sweep** | LLCs buying 5+ SFH in 24 mo (BTR buyer list) | **built** → `omni-engine/vector-c-capital-sweep/` |
+
+Downstream of the vectors:
+
+- **Pain-Point matching engine** → `omni-engine/matching/` — routes A/B/C leads
+  into the four Plays (pure, deterministic, unit-tested).
+- **Contract generators** → `omni-engine/contracts/` — Exclusive Option to Purchase
+  + Assignment & Finder's Fee, with the mandated disclosure clauses and a hard
+  "no Wholesale" compliance guard.
 
 ## Pain-Point matching plays (how scraped data is routed)
 
