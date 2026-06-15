@@ -1,0 +1,10 @@
+{
+  "name": "omni-engine-contracts",
+  "version": "0.1.0",
+  "description": "Honest-Broker contract generators - Exclusive Option to Purchase (seller) and Assignment & Finder's Fee Agreement (builder/investor), with mandated disclosure clauses.",
+  "type": "module",
+  "bin": { "omni-contract": "src/cli.js" },
+  "scripts": {
+    "test": "node test/contracts.test.js"
+  }
+}
