@@ -1,0 +1,67 @@
+{
+  "title": "Vector A: Builder Health Sweep - Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "permitSource": {
+      "title": "Building-permit source",
+      "type": "object",
+      "description": "Public permit dataset. type 'socrata' (e.g. data.kcmo.org SoQL endpoint) or 'arcgis' (FeatureServer/MapServer query). Verify the endpoint before production.",
+      "editor": "json",
+      "prefill": {
+        "type": "socrata",
+        "url": "https://data.kcmo.org/resource/<permits-dataset-id>.json",
+        "where": "permit_type like '%RESIDENTIAL%'"
+      }
+    },
+    "permitFieldMap": {
+      "title": "Permit field mapping",
+      "type": "object",
+      "editor": "json",
+      "prefill": {
+        "builderName": "contractor_name",
+        "issueDate": "issue_date",
+        "address": "address",
+        "permitType": "permit_type"
+      }
+    },
+    "listingsSource": {
+      "title": "New-construction listings source (optional)",
+      "type": "object",
+      "description": "Optional spec-listing feed (MLS export, Zillow new-construction Apify run, etc.) for DOM / price-drop signals. type 'socrata' or 'arcgis'.",
+      "editor": "json"
+    },
+    "listingsFieldMap": {
+      "title": "Listing field mapping",
+      "type": "object",
+      "editor": "json",
+      "prefill": {
+        "builderName": "builder",
+        "address": "address",
+        "listDate": "list_date",
+        "daysOnMarket": "dom",
+        "originalPrice": "original_price",
+        "currentPrice": "price",
+        "status": "status"
+      }
+    },
+    "windowMonths": {
+      "title": "Trailing window (months) for permit count",
+      "type": "integer",
+      "default": 24
+    },
+    "minPermitsPerYear": { "title": "Min permits/yr (mid-market floor)", "type": "integer", "default": 5 },
+    "maxPermitsPerYear": { "title": "Max permits/yr (mid-market ceiling)", "type": "integer", "default": 50 },
+    "staleDomDays": { "title": "Stale-spec DOM threshold (days)", "type": "integer", "default": 60 },
+    "megaBuilderExcludes": {
+      "title": "Mega-builders to exclude",
+      "type": "array",
+      "editor": "stringList",
+      "prefill": ["D.R. Horton", "Lennar", "Pulte", "NVR", "Ryan Homes", "KB Home", "Taylor Morrison", "Meritage", "Century Communities", "LGI Homes", "Richmond American"]
+    },
+    "pageSize": { "title": "Page size", "type": "integer", "default": 1000 },
+    "maxRecords": { "title": "Max records per source", "type": "integer", "default": 50000 },
+    "webhookUrl": { "title": "n8n / CRM webhook URL", "type": "string", "editor": "textfield" }
+  },
+  "required": ["permitSource"]
+}

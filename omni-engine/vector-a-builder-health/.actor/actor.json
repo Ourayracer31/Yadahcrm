@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "name": "vector-a-builder-health",
+  "title": "Omni-Engine | Vector A: Builder Health Sweep",
+  "description": "Rolls up public building permits by builder, keeps the mid-market band (5-50/yr, mega-builders excluded), and layers spec DOM / price-drop signals to flag Choked vs Selling-out builders.",
+  "version": "0.1",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "title": "Builder health roster",
+      "views": {
+        "roster": {
+          "title": "Builder roster",
+          "transformation": {
+            "fields": ["displayName", "permitCount", "permitsPerYear", "healthStatus", "suggestedPlay", "specSummary"]
+          },
+          "display": { "component": "table" }
+        }
+      }
+    }
+  }
+}
