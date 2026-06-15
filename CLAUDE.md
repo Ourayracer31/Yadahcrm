@@ -49,6 +49,13 @@ Downstream of the vectors:
   language (no wholesaler/hype vocabulary) and human-final-decision (nothing
   auto-sends; only Travis decides). *AI finds the conversations; Travis creates
   the opportunity.*
+- **Relationship Intelligence System** → `omni-engine/contact-memory/` — a
+  permanent markdown memory file per contact under `/contacts/**`
+  (builders-developers / landowners / investors / service-partners), with
+  append-only conversation history, full intake templates, AI-recommendation
+  sync, the Field Reality Rule ("would Travis believe it after standing on the
+  property?"), and the daily `/daily/travis-follow-up-board.md`. Extends the
+  operator layer's in-memory Relationship Memory; never a spam machine.
 - **Contract generators** → `omni-engine/contracts/` — Exclusive Option to Purchase
   + Assignment & Finder's Fee, with the mandated disclosure clauses and a hard
   "no Wholesale" compliance guard.
