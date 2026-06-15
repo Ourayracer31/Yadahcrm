@@ -9,20 +9,25 @@ private-system access, no writes to county systems.
 ## Pipeline
 
 ```
-  PUBLIC RECORDS              INGESTION (Apify actors)        ROUTING        OPERATOR LAYER       OUTPUT
-  ─────────────               ────────────────────────        ───────        ──────────────       ──────
+  PUBLIC RECORDS              INGESTION (Apify actors)      CREATION      ROUTING       OPERATOR LAYER     OUTPUT
+  ─────────────               ────────────────────────      ────────      ───────       ──────────────     ──────
   county permits ─────────▶  Vector A Builder Health ─┐
-  county tax/GIS/zoning ──▶  Vector B The Dirt Sweep ─┼─▶ matching/ ─▶ operator/ ───────────▶ contracts/ ─▶ n8n/CRM
-  assessor/recorder ──────▶  Vector C Capital Sweep ──┘   (4 Plays)   (briefings, scoring,    (Option +     (webhook)
-                                                                       field-check, war room,  Assignment)
-                                                                       deal-killer, scripts,
-                                                                       memory, 30-contact OS)
+  county tax/GIS/zoning ──▶  Vector B The Dirt Sweep ─┼─▶ synthesis/ ─(or)─ matching/ ─▶ operator/ ─▶ contracts/ ─▶ n8n/CRM
+  assessor/recorder ──────▶  Vector C Capital Sweep ──┘   creates       4 Plays      briefings,        Option +     (webhook)
+                                                          opportunities  (pairwise)   scoring, field-   Assignment
+                                                          (People x                   check, war room,
+                                                           Timing x                   deal-killer,
+                                                           Capital x                  scripts, memory,
+                                                           Land)                      30-contact OS
 ```
 
-> **The Operator Intelligence Layer (`operator/`) is the spine.** Every other
-> module feeds it; it turns raw matches into field-ready, scored, human-decided
-> intelligence for Travis Manley. *AI finds the conversations worth having;
-> Travis creates the opportunity.*
+> **Opportunities are created, not discovered.** `synthesis/` combines People ×
+> Timing × Capital × Land into multi-party, de-risked opportunities none of the
+> parties initiated (the flagship being the Land+Builder+Capital chain). The
+> **Operator Intelligence Layer (`operator/`) is the spine** every opportunity
+> then routes through — turning each creation into field-ready, scored,
+> human-decided intelligence for Travis Manley. *AI finds the conversations worth
+> having; Travis creates the opportunity.*
 
 ## Modules
 
@@ -31,7 +36,8 @@ private-system access, no writes to county systems.
 | `vector-a-builder-health/` | Mid-market builders (5–50 permits/yr), spec DOM & price drops → Choked vs Selling-out | logic verified |
 | `vector-b-dirt-sweep/` | Multi-family/infill lots (R-2.5/R-3/R-4…) + 10–40 ac tracts; out-of-state, vacant, equity proxy | 16 passing |
 | `vector-c-capital-sweep/` | BTR buyer list: LLCs buying 5+ SFH / 24 mo | logic verified |
-| `matching/` | Routes A/B/C leads into the 4 Plays with disclosed fee math | 14 passing |
+| `synthesis/` | **Opportunity Synthesis Engine** — creates opportunities by combining People × Timing × Capital × Land; never assumes discovery | 24 passing |
+| `matching/` | Routes A/B/C leads into the 4 Plays with disclosed fee math (pairwise discovery) | 14 passing |
 | `operator/` | **Operator Intelligence Layer** — briefings, pain-first scoring, field-reality, deal-killer, reverse-selling scripts, relationship memory, daily war room, 30-contact OS; trust-first language + human-final-decision | 53 passing |
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
 

@@ -34,8 +34,13 @@ This is a **Data Broker / procurement-finder** business, not a wholesaler.
 
 Downstream of the vectors:
 
-- **Pain-Point matching engine** → `omni-engine/matching/` — routes A/B/C leads
-  into the four Plays (pure, deterministic, unit-tested).
+- **Opportunity Synthesis Engine** → `omni-engine/synthesis/` — the system never
+  assumes opportunities are *discovered*; it **creates** them by intelligently
+  combining **People × Timing × Capital × Land** (flagship: the Land+Builder+Capital
+  chain). Every output is `origin:"synthesized"`, `discovered:false`, with a
+  creation thesis, the conditions to make true, and the catalyst move.
+- **Pain-Point matching engine** → `omni-engine/matching/` — pairwise routing of
+  A/B/C leads into the four Plays (pure, deterministic, unit-tested).
 - **Operator Intelligence Layer** → `omni-engine/operator/` — **the spine every
   other module routes through.** Turns raw matches into field-ready intelligence
   for Travis Manley: operator briefings, pain-first scoring (Operator Fit gates),
