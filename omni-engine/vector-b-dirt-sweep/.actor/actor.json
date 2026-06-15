@@ -1,0 +1,45 @@
+{
+  "actorSpecification": 1,
+  "name": "vector-b-dirt-sweep",
+  "title": "Omni-Engine | Vector B: The Dirt Sweep",
+  "description": "Pulls public county tax/parcel records for multi-family-zoned infill lots (KCMO / KCK) and density-eligible acreage tracts (Cass / Miami / Platte). Filters on zoning code, vacancy, owner-occupancy and equity, and emits skip-trace-ready leads.",
+  "version": "0.1",
+  "meta": {
+    "templateId": "js-start"
+  },
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "title": "Vector B parcel leads",
+      "views": {
+        "leads": {
+          "title": "Dirt Sweep leads",
+          "transformation": {
+            "fields": [
+              "county",
+              "parcelId",
+              "zoning",
+              "playTarget",
+              "situsAddress",
+              "ownerName",
+              "ownerMailingState",
+              "outOfStateOwner",
+              "vacantOrTeardown",
+              "acreage",
+              "landValue",
+              "improvementValue",
+              "totalAssessedValue",
+              "equityProxy",
+              "skipTraceReady"
+            ]
+          },
+          "display": {
+            "component": "table"
+          }
+        }
+      }
+    }
+  }
+}

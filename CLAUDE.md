@@ -1,0 +1,56 @@
+# CLAUDE.md — Manley Systems / YadahCRM workspace
+
+Guidance for AI agents working in this repository.
+
+## What lives here
+
+Two related efforts share this repo:
+
+1. **YadahCRM** (root) — a voice-note CRM MVP for realtors/agents
+   (React + Vite + Supabase + OpenAI). See `YadahCRM_Cold_Launch_Implementation.txt`.
+2. **The Omni-Engine** (`omni-engine/`) — an automated, multi-vector real estate
+   **matchmaking / data-broker** system for the Kansas City / Midwest region,
+   operated by Manley Systems LLC.
+
+## Omni-Engine operating posture ("Honest Broker")
+
+This is a **Data Broker / procurement-finder** business, not a wholesaler.
+
+- Only aggregate **public** records (county tax/GIS/assessment, public permit
+  feeds, public LLC registries). No private-system access, no writes to county
+  systems, no spam.
+- We do not act as a licensed real estate agent — we buy and **assign Option
+  Contracts**, with full disclosure of role.
+- Avoid the word "Wholesale" in generated documents. Use the Exclusive Option to
+  Purchase + Assignment & Finder's Fee frameworks described in the mission brief.
+
+## The three ingestion vectors
+
+| Vector | Name | Target | Status |
+|--------|------|--------|--------|
+| A | Builder Health Sweep | Mid-market builders (5–50 permits/yr); spec DOM & price drops | planned |
+| **B** | **The Dirt Sweep** | Multi-family/infill-zoned lots (KCMO/KCK) + 10–40 ac exurban tracts | **built** → `omni-engine/vector-b-dirt-sweep/` |
+| C | Capital Sweep | LLCs buying 5+ SFH in 24 mo (BTR buyer list) | planned |
+
+## Pain-Point matching plays (how scraped data is routed)
+
+1. **Margin Squeeze** — option an R-3 infill lot ($50–70k), assign to a builder
+   for a ~$10k fee (duplex on city pre-approved plans).
+2. **Liquidity Bailout** — connect a builder's 60+ day spec to Vector C BTR
+   investors; $5k finder's fee per door.
+3. **Capital Preservation** — 120-day option on a premium suburban lot marketed
+   build-to-suit; paid at retail closing.
+4. **Pipeline Drought** — option a 15+ ac exurban tract; assign for a five-figure fee.
+
+Vector B tags each lead with the Play it feeds (`playTarget`).
+
+## Conventions for agents
+
+- Each vector is a self-contained Apify actor under `omni-engine/<vector>/`
+  (Node.js, ESM, Apify SDK v3).
+- County/data-source endpoints and attribute names are **configurable via input**
+  and must be **verified against live service directories** before production
+  runs — never hard-code unverified endpoints as if confirmed.
+- Keep enrichment honest: label approximations (e.g. `equityProxy`) as screening
+  signals, not valuations.
+- Branch work per the active task's feature branch; commit with clear messages.
