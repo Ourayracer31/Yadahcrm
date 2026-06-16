@@ -104,9 +104,9 @@ You have an **Apify account (MCP-capable)** — so A/B/C are deployable now: see
    pre-filled.
 3. **A real database.** Memory is markdown files + JSON. Fine for one operator;
    no multi-user, no concurrent-write safety, no search UI.
-4. **A UI / dashboard.** Everything is CLI + markdown files (+ optional n8n
-   push). There's no web app yet (the root `YadahCRM` Vite app is separate and
-   not wired in).
+4. **A web UI / dashboard.** The daily digest now lands on your phone
+   (`notify/`), and everything is CLI + markdown files (+ optional n8n push), but
+   there's no web app yet (the root `YadahCRM` Vite app is separate, not wired in).
 5. **Permit-pulse automation for Vector A.** The actor needs a confirmed permit
    feed; "spec DOM + price drops" assumes a listings source you connect.
 6. **Authentication/secrets management** for the webhook + API keys beyond `.env`.
@@ -154,7 +154,9 @@ You have an **Apify account (MCP-capable)** — so A/B/C are deployable now: see
 **Phase 3 — Close the loop**
 7. ~~Skip-trace integration (owner phone/email)~~ **DONE** (`skiptrace/`) — just
    add your provider's `SKIPTRACE_URL` + `SKIPTRACE_API_KEY` and it runs.
-8. n8n dashboards live (push board + first-call alert to Travis's phone).
+8. ~~Push board + first-call alert to Travis's phone~~ **DONE** (`notify/`) —
+   set `NOTIFY_CHANNEL=telegram` (+ bot token/chat id) and the morning digest,
+   first call, and the number to dial land on your phone automatically.
 
 **Phase 4 — Productize**
 9. Move memory from files → a real DB (Supabase is already available) for search,
@@ -175,6 +177,7 @@ operator/   the spine: scoring, field-reality, deal-killer,      53 tests
 contact-memory/  per-contact files + daily board (append-only)  35 tests
 contracts/  Option to Purchase + Assignment & Finder's Fee       18 tests
 skiptrace/  owner -> phone/email (provider-agnostic, cached)     15 tests
+notify/     morning digest to your phone (Telegram/Slack/webhook) 17 tests
 routing/    n8n/webhook (internal dashboards only)               19 tests
 runner/     one-command daily pipeline                           12 tests
 conversation/  record/transcribe/summarize a call → memory       26 tests

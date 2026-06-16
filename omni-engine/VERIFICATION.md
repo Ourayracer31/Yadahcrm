@@ -79,6 +79,7 @@ pagination/retry/enrichment, just the socket simulated. Nothing is stubbed.
 | **Apify integration** (run actors + pull datasets via REST + token) | `tools/apify.js` | `verify` (client request/response proven) |
 | Auto-map county fields (no hand-mapping) | `tools/auto-config.js` | 12 tests |
 | **Skip-trace** (owner → phone/email, provider-agnostic, cached) → phone on the board | `skiptrace/` | 15 tests |
+| **Phone digest** (first call + number pushed to your phone each morning) | `notify/` | 17 tests |
 | Hands-off scheduler | `tools/daemon.js` + `tools/run-all.sh` | chain wired; `verify` proves each stage |
 
 ---

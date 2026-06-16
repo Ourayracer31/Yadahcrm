@@ -42,6 +42,7 @@ private-system access, no writes to county systems.
 | `contact-memory/` | **Relationship Intelligence System** — permanent per-contact markdown files (`/contacts/**`), append-only history, builder/landowner/investor/partner templates, daily follow-up board, Field Reality Rule | 32 passing |
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
 | `skiptrace/` | **Skip-trace** — owner → phone/email via a configurable provider (cached); files the number into landowner memory + the board | 15 passing |
+| `notify/` | **Phone digest** — pushes the morning board (first call + the number to dial) to your phone via Telegram/Slack/webhook | 17 passing |
 | `routing/` | **n8n / webhook routing layer** — pushes operator output + daily board to CRM dashboards; internal-only (never auto-contacts a lead) | 19 passing |
 | `runner/` | **One-command daily runner** — chains vectors → synthesis → operator → board → routing; writes all artifacts (`npm run daily`) | 12 passing |
 | `conversation/` | **Conversation capture** — record/transcribe/summarize a call (Claude + offline heuristic) and feed it into relationship memory (append-only) | 26 passing |
