@@ -43,6 +43,8 @@ private-system access, no writes to county systems.
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
 | `routing/` | **n8n / webhook routing layer** — pushes operator output + daily board to CRM dashboards; internal-only (never auto-contacts a lead) | 19 passing |
 | `runner/` | **One-command daily runner** — chains vectors → synthesis → operator → board → routing; writes all artifacts (`npm run daily`) | 12 passing |
+| `conversation/` | **Conversation capture** — record/transcribe/summarize a call (Claude + offline heuristic) and feed it into relationship memory (append-only) | 26 passing |
+| `tools/` | **Field discovery** — read a county's live ArcGIS schema and auto-suggest the parcel `fieldMap` | 14 passing |
 
 ## The four Plays (matching engine)
 
@@ -53,13 +55,22 @@ private-system access, no writes to county systems.
 | **Capital Preservation** | builder won't risk cash on dirt | 120-day option, build-to-suit | paid at retail closing |
 | **Pipeline Drought** | heavy hitter needs subdivision space | option 15+ ac tract, assign | five-figure |
 
-## Quick start — the one-command daily runner
+## Quick start
 
 ```bash
 cd omni-engine
 npm run daily        # runs the full pipeline on bundled sample data
-npm test             # 175 tests across all modules
+npm test             # 215 tests across all modules
 ```
+
+Even easier: **double-click `run.command`** (Mac) or **`run.bat`** (Windows) — it
+runs the daily pipeline and opens the board. After a call, log it so the robot
+remembers: `npm run log -- --contact "Name" --type builder --text "..."` (or
+record via `conversation/src/recorder.html`). See [`CHEATSHEET.md`](./CHEATSHEET.md).
+
+To pull real KC county data, find each layer's field names with
+`node tools/discover-fields.js --url <layer-query-url>` (base service URLs are in
+`config/county-sources.json`).
 
 `runner/` chains it all: **vectors' output → synthesis → operator →
 contact-memory board → (optional) n8n routing**, writing the War Room,

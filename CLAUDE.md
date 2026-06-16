@@ -87,6 +87,21 @@ Vector B tags each lead with the Play it feeds (`playTarget`).
 - Live runtime data under `/contacts`, `/daily`, and `out/` is git-ignored
   (may contain PII); committed `examples/` + `samples/` show the formats.
 
+## Capturing conversations + plugging in real data
+
+- **Log a call:** `omni-engine/conversation/` — `node conversation/src/logCall.js
+  --contact "Name" --type builder --text "..."` (or `--audio file.webm`). Summarizes
+  via Claude (`claude-opus-4-8`, needs `ANTHROPIC_API_KEY`) with an offline heuristic
+  fallback; transcription via Whisper (`OPENAI_API_KEY`). Appends to the contact's
+  memory file and sets the next follow-up. `recorder.html` is a browser record button.
+- **One button:** `omni-engine/run.command` (Mac) / `run.bat` (Windows) run the daily
+  pipeline and open the board. `CHEATSHEET.md` is the plain-language guide.
+- **Real county data:** base ArcGIS service URLs (Jackson/KCMO, Wyandotte/KCK) are
+  verified in `omni-engine/config/county-sources.json`; the exact field names must be
+  read from each live service (the servers block bots) via
+  `node omni-engine/tools/discover-fields.js --url <layer-query-url>`, which suggests
+  the `fieldMap`.
+
 ## Conventions for agents
 
 - Each vector is a self-contained Apify actor under `omni-engine/<vector>/`
