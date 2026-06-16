@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omni-Engine — Record a Call</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 30rem; margin: 2rem auto; padding: 0 1rem; color: #111; }
+  h1 { font-size: 1.3rem; }
+  button { font-size: 1.1rem; padding: 0.9rem 1.3rem; border: none; border-radius: 0.6rem; cursor: pointer; margin: 0.3rem 0; width: 100%; }
+  #rec { background: #c0392b; color: #fff; }
+  #stop { background: #333; color: #fff; }
+  #rec[disabled], #stop[disabled] { opacity: 0.4; cursor: default; }
+  .note { color: #555; font-size: 0.9rem; line-height: 1.5; }
+  #status { font-weight: 600; margin: 0.6rem 0; }
+  a.dl { display: block; margin-top: 1rem; }
+  ol { line-height: 1.7; }
+</style></head>
+<body>
+  <h1>🎙️ Record a Call</h1>
+  <p class="note">Tap <b>Start</b>, talk (or hold near the call), tap <b>Stop</b>, then <b>Download</b>. Nothing is uploaded anywhere — the file stays on this device. Then feed it to the robot with <code>omni-log --audio &lt;file&gt;</code>.</p>
+  <button id="rec">● Start recording</button>
+  <button id="stop" disabled>■ Stop</button>
+  <div id="status">Idle.</div>
+  <audio id="play" controls style="width:100%;display:none"></audio>
+  <a id="download" class="dl" style="display:none" download="omni-call.webm">⬇️ Download recording</a>
+
+  <h3>Then:</h3>
+  <ol class="note">
+    <li>Save the file somewhere you can find it.</li>
+    <li>Run: <code>node omni-engine/conversation/src/logCall.js --contact "Name" --type builder --audio omni-call.webm --save-transcript</code></li>
+    <li>The robot transcribes it, summarizes the important parts, and remembers it.</li>
+  </ol>
+
+<script>
+  let mediaRecorder, chunks = [];
+  const rec = document.getElementById('rec'), stop = document.getElementById('stop');
+  const status = document.getElementById('status'), play = document.getElementById('play'), download = document.getElementById('download');
+
+  rec.onclick = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      chunks = [];
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        play.src = url; play.style.display = 'block';
+        download.href = url; download.style.display = 'block';
+        status.textContent = 'Saved. Download it, then run omni-log --audio.';
+        stream.getTracks().forEach((t) => t.stop());
+      };
+      mediaRecorder.start();
+      rec.disabled = true; stop.disabled = false;
+      status.textContent = '● Recording… tap Stop when done.';
+    } catch (err) {
+      status.textContent = 'Mic permission denied or unavailable: ' + err.message;
+    }
+  };
+  stop.onclick = () => { mediaRecorder && mediaRecorder.stop(); rec.disabled = false; stop.disabled = true; };
+</script>
+</body></html>
