@@ -15,10 +15,10 @@ import { asSuggestion } from './decision.js';
 import { generateOpener } from './scripts.js';
 
 function pickContact(opp) {
-  if (opp.builder?.displayName) return { type: 'Builder', name: opp.builder.displayName };
-  if (opp.buyer?.displayName) return { type: 'Investor', name: opp.buyer.displayName };
-  if (opp.lot?.ownerName) return { type: 'Landowner', name: opp.lot.ownerName };
-  return { type: 'Contact', name: 'Unknown' };
+  if (opp.builder?.displayName) return { type: 'Builder', name: opp.builder.displayName, phone: opp.builder.phone || null };
+  if (opp.buyer?.displayName) return { type: 'Investor', name: opp.buyer.displayName, phone: opp.buyer.phone || null };
+  if (opp.lot?.ownerName) return { type: 'Landowner', name: opp.lot.ownerName, phone: (opp.lot.ownerPhones || [])[0] || null };
+  return { type: 'Contact', name: 'Unknown', phone: null };
 }
 
 /** Build the structured briefing object (the 10 required sections). */
@@ -114,7 +114,7 @@ export function renderBriefing(briefing) {
     `OPERATOR BRIEFING — SUGGESTED FOR TRAVIS`,
     `(recommendation only; Travis decides contact, angle, and whether to pursue)`,
     ``,
-    `1. CONTACT: ${briefing.contact.name} (${briefing.contact.type})`,
+    `1. CONTACT: ${briefing.contact.name} (${briefing.contact.type})${briefing.contact.phone ? ` — ☎ ${briefing.contact.phone}` : ''}`,
     `2. WHY THIS MATTERS: ${briefing.whyMatters}`,
     ...creationLines,
     `3. LIKELY PAIN: ${briefing.pain}`,

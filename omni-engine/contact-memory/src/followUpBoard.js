@@ -21,6 +21,9 @@ function contactBlock(o) {
   return {
     name: o.briefing?.contact?.name || o.parties?.builder || o.parties?.landowner || 'Contact',
     type: o.briefing?.contact?.type || 'Contact',
+    phone: o.briefing?.contact?.phone || null,                       // the primary contact's OWN phone
+    landownerName: o.lot?.ownerName || null,
+    landownerPhone: o.briefing?.contact?.type === 'Landowner' ? null : (o.lot?.ownerPhones || [])[0] || null,
     play: o.play,
     composite: o.score?.composite,
     angle: o.briefing?.bestOpeningAngle,
@@ -90,7 +93,8 @@ function renderBoard(b) {
 
     `## Must Contact Today\n`,
     bullets(b.mustContact, (c) => [
-      `- **${c.name}** (${c.type}) — ${c.play}`,
+      `- **${c.name}** (${c.type})${c.phone ? ` — ☎ ${c.phone}` : ''} — ${c.play}`,
+      ...(c.landownerPhone ? [`  - Landowner ${c.landownerName || ''} ☎ ${c.landownerPhone}`] : []),
       `  - Reason: ${c.nextAction}`,
       `  - Suggested opening line: "${c.angle}"`,
       `  - Desired outcome: ${c.desiredOutcome}`,
@@ -116,7 +120,7 @@ function renderBoard(b) {
 
     `\n## First Call Recommendation\n`,
     b.firstCall
-      ? `**Call ${b.firstCall.name} first** (${b.firstCall.play}, composite ${b.firstCall.composite}).\n- Open: "${b.firstCall.angle}"\n- Desired outcome: ${b.firstCall.desiredOutcome}`
+      ? `**Call ${b.firstCall.name} first** (${b.firstCall.play}, composite ${b.firstCall.composite}).${b.firstCall.phone ? `\n- ☎ ${b.firstCall.phone}` : ''}${b.firstCall.landownerPhone ? `\n- Landowner ${b.firstCall.landownerName || ''} ☎ ${b.firstCall.landownerPhone}` : ''}\n- Open: "${b.firstCall.angle}"\n- Desired outcome: ${b.firstCall.desiredOutcome}`
       : `_No qualified first call today._`,
   ].join('\n');
 

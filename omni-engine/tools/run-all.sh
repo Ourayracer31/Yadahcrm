@@ -45,6 +45,12 @@ if [ -n "$APIFY_TOKEN" ] && [ -n "$APIFY_VECTOR_C" ]; then
   node tools/apify.js --actor "$APIFY_VECTOR_C" $C_IN --out samples/buyers.json || echo "   (Vector C run failed — keeping existing buyers.json)"
 fi
 
+# skip-trace owners so the board has a number to call (if a provider is configured)
+if [ -n "$SKIPTRACE_URL" ] && [ -n "$SKIPTRACE_API_KEY" ] && [ -f samples/lots.json ]; then
+  echo "→ skip-tracing owners…"
+  node skiptrace/src/cli.js --in samples/lots.json --out samples/lots.json --memory crm.json --root . || echo "   (skip-trace failed — continuing without phone numbers)"
+fi
+
 echo "→ running the daily pipeline…"
 ROUTE=""
 [ -n "$OMNI_WEBHOOK_DEFAULT" ] && ROUTE="--route"
