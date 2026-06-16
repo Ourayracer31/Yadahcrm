@@ -79,7 +79,9 @@ function slugPart(s) {
  */
 export function fileNameFor(contact) {
   const name = slugPart(contact.name);
-  const tail = slugPart(contact.company) || slugPart(contact.location) || slugPart(contact.propertyAddress) || 'contact';
+  // Company, else location/property, qualifies the filename. With none, the name
+  // alone is the filename (no awkward "-contact" suffix).
+  const tail = slugPart(contact.company) || slugPart(contact.location) || slugPart(contact.propertyAddress);
   const base = [name, tail].filter(Boolean).join('-') || 'unknown-contact';
   return `${base}.md`;
 }

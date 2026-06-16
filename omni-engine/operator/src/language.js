@@ -62,7 +62,8 @@ export function checkLanguage(text) {
   const str = String(text ?? '');
   const violations = [];
   for (const term of BANNED_TERMS) {
-    const re = new RegExp(`\\b${escapeRegex(term)}\\b`, 'gi');
+    // `s?` catches simple plurals (wholesaler -> wholesalers, cash buyer -> cash buyers).
+    const re = new RegExp(`\\b${escapeRegex(term)}s?\\b`, 'gi');
     let m;
     while ((m = re.exec(str)) !== null) {
       violations.push({ term, index: m.index, match: m[0] });
@@ -91,7 +92,7 @@ export function scrubLanguage(text) {
   const violations = checkLanguage(clean);
   for (const term of BANNED_TERMS) {
     const replacement = REWRITES[term] || '[redacted]';
-    const re = new RegExp(`\\b${escapeRegex(term)}\\b`, 'gi');
+    const re = new RegExp(`\\b${escapeRegex(term)}s?\\b`, 'gi');
     clean = clean.replace(re, (match) => {
       // preserve leading capitalization
       return /^[A-Z]/.test(match) ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
