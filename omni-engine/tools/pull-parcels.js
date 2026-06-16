@@ -99,7 +99,9 @@ async function main() {
   }
 
   const zoningCodes = opt.zoning.split(',').map((s) => s.trim()).filter(Boolean);
-  const where = buildZoningWhereClause(source.zoningField, zoningCodes);
+  // A source may specify an explicit WHERE (e.g. absentee owners on a layer with
+  // no zoning field); otherwise we build the zoning filter from the codes.
+  const where = source.where && source.where.trim() ? source.where : buildZoningWhereClause(source.zoningField, zoningCodes);
   const config = { vacantOnly: opt.vacant, teardownImprovementCeiling: 25000, vacantLandUseCodes: ['VAC', 'VACANT', '0000', '1000'], minAcreage: 0, maxAcreage: 0, minEquityProxy: 0 };
 
   console.log(`Querying ${source.county}\n  ${source.queryUrl}\n  WHERE ${where}`);
