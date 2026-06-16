@@ -1,6 +1,15 @@
 # 🪪 Omni-Engine Cheat Sheet (keep this next to the computer)
 
-## Every morning — one button
+## Set it once, then ignore it (hands-off)
+```
+node tools/daemon.js --at 06:00
+```
+Leave it running. Every morning it resolves county fields, pulls real parcels,
+runs the scrapers, and refreshes your board — no input from you. Then you just
+read `daily/travis-follow-up-board.md` and make the calls.
+*(First, once: put keys in `.env`, and `bash tools/deploy-actors.sh` for Apify.)*
+
+## Or run it on demand — one button
 - **Mac:** double-click **`run.command`**
 - **Windows:** double-click **`run.bat`**
 - It runs everything and opens **today's board**.
