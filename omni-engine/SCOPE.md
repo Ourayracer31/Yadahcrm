@@ -95,9 +95,10 @@ You have an **Apify account (MCP-capable)** — so A/B/C are deployable now: see
 
 ## 🔴 What's MISSING (not built yet)
 
-1. **Skip-tracing / contact enrichment.** The engine identifies *parcels and
-   owners*; it does not look up phone numbers/emails for absentee owners. Today
-   that's a manual or third-party step (e.g. a skip-trace provider/API).
+1. **A skip-trace *provider account*.** The skip-trace engine is **built**
+   (`skiptrace/` — provider-agnostic client, caching, lead + memory enrichment,
+   phone on the board; 15 tests). What's missing is *your* licensed provider:
+   pick one, set `SKIPTRACE_URL` + `SKIPTRACE_API_KEY`, and it runs automatically.
 2. **Live endpoint verification at scale.** County field names are verified
    one-by-one with `discover-fields.js`. Cass/Platte/Miami tract sources aren't
    pre-filled.
@@ -151,8 +152,8 @@ You have an **Apify account (MCP-capable)** — so A/B/C are deployable now: see
    auto-resolves their fields on the next run).
 
 **Phase 3 — Close the loop**
-7. Skip-trace integration (owner phone/email) — pick a provider, add a `tools/`
-   enricher that fills the contact's phone/email.
+7. ~~Skip-trace integration (owner phone/email)~~ **DONE** (`skiptrace/`) — just
+   add your provider's `SKIPTRACE_URL` + `SKIPTRACE_API_KEY` and it runs.
 8. n8n dashboards live (push board + first-call alert to Travis's phone).
 
 **Phase 4 — Productize**
@@ -173,10 +174,11 @@ operator/   the spine: scoring, field-reality, deal-killer,      53 tests
             trust-first language, human-final-decision
 contact-memory/  per-contact files + daily board (append-only)  35 tests
 contracts/  Option to Purchase + Assignment & Finder's Fee       18 tests
+skiptrace/  owner -> phone/email (provider-agnostic, cached)     15 tests
 routing/    n8n/webhook (internal dashboards only)               19 tests
 runner/     one-command daily pipeline                           12 tests
 conversation/  record/transcribe/summarize a call → memory       26 tests
-tools/      field discovery + direct parcel pull                 18 tests
+tools/      field discovery + parcel pull + Apify + self-test    30 tests
 vector-a/b/c/  Apify ingestion actors (deploy to run)            logic verified
 ```
 
