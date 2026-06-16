@@ -31,11 +31,15 @@ export function leadsFromFeatures(rows, source, config) {
   return out;
 }
 
-/** Paginated ArcGIS query with retry/backoff over native fetch. */
-async function* queryArcgis({ queryUrl, where, pageSize, maxRecords }) {
+/**
+ * Paginated ArcGIS query with retry/backoff. `fetchImpl` is injectable so the
+ * exact pagination + retry path can be exercised in self-tests against authentic
+ * ArcGIS response shapes (and swapped for real fetch in production).
+ */
+export async function* queryArcgis({ queryUrl, where, pageSize, maxRecords, fetchImpl = fetch, sleepImpl }) {
   let offset = 0;
   let pulled = 0;
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const sleep = sleepImpl || ((ms) => new Promise((r) => setTimeout(r, ms)));
   while (true) {
     if (maxRecords > 0 && pulled >= maxRecords) return;
     const thisPage = maxRecords > 0 ? Math.min(pageSize, maxRecords - pulled) : pageSize;
@@ -46,7 +50,7 @@ async function* queryArcgis({ queryUrl, where, pageSize, maxRecords }) {
     let body;
     for (let attempt = 1; attempt <= 4; attempt++) {
       try {
-        const res = await fetch(`${queryUrl}?${params.toString()}`, { headers: { Accept: 'application/json', 'User-Agent': 'OmniEngine/0.1' } });
+        const res = await fetchImpl(`${queryUrl}?${params.toString()}`, { headers: { Accept: 'application/json', 'User-Agent': 'OmniEngine/0.1' } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         body = await res.json();
         if (body.error) throw new Error(`ArcGIS ${body.error.code}: ${body.error.message}`);

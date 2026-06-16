@@ -28,12 +28,21 @@ node -e '
     console.log("   merged "+all.length+" parcels into samples/lots.json");
   })' || true
 
-# 3. Apify actors A/C — only if the Apify CLI is logged in and actor IDs are set.
-if command -v apify >/dev/null 2>&1 && [ -n "$APIFY_VECTOR_A" ]; then
-  echo "→ running Vector A (builders) on Apify…"; apify call "$APIFY_VECTOR_A" --silent >/dev/null 2>&1 && apify actor:dataset:get-items "$APIFY_VECTOR_A" > samples/builders.json 2>/dev/null || true
+# 3. Apify actors via the REST API (just needs APIFY_TOKEN + actor ids in .env).
+if [ -n "$APIFY_TOKEN" ] && [ -n "$APIFY_VECTOR_A" ]; then
+  echo "→ running Vector A (builders) on Apify…"
+  A_IN=""; [ -f config/vector-a-input.json ] && A_IN="--input config/vector-a-input.json"
+  node tools/apify.js --actor "$APIFY_VECTOR_A" $A_IN --out samples/builders.json || echo "   (Vector A run failed — keeping existing builders.json)"
 fi
-if command -v apify >/dev/null 2>&1 && [ -n "$APIFY_VECTOR_C" ]; then
-  echo "→ running Vector C (buyers) on Apify…"; apify call "$APIFY_VECTOR_C" --silent >/dev/null 2>&1 && apify actor:dataset:get-items "$APIFY_VECTOR_C" > samples/buyers.json 2>/dev/null || true
+if [ -n "$APIFY_TOKEN" ] && [ -n "$APIFY_VECTOR_B" ]; then
+  echo "→ running Vector B (dirt) on Apify…"
+  B_IN=""; [ -f config/vector-b-input.json ] && B_IN="--input config/vector-b-input.json"
+  node tools/apify.js --actor "$APIFY_VECTOR_B" $B_IN --out samples/lots.json || echo "   (Vector B Apify run failed — using the direct-pull lots.json)"
+fi
+if [ -n "$APIFY_TOKEN" ] && [ -n "$APIFY_VECTOR_C" ]; then
+  echo "→ running Vector C (buyers) on Apify…"
+  C_IN=""; [ -f config/vector-c-input.json ] && C_IN="--input config/vector-c-input.json"
+  node tools/apify.js --actor "$APIFY_VECTOR_C" $C_IN --out samples/buyers.json || echo "   (Vector C run failed — keeping existing buyers.json)"
 fi
 
 echo "→ running the daily pipeline…"
