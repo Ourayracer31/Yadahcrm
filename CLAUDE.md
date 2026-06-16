@@ -76,6 +76,17 @@ Downstream of the vectors:
 
 Vector B tags each lead with the Play it feeds (`playTarget`).
 
+## Running it daily
+
+- **One command:** `cd omni-engine && npm run daily` runs the whole pipeline on
+  bundled sample data (`samples/`, `config/omni.config.example.json`) →
+  `runner/` chains vectors' output → synthesis → operator → contact-memory board
+  → optional n8n routing, writing `out/**` + `daily/travis-follow-up-board.md`.
+- **All tests:** `cd omni-engine && npm test` (175 across all modules).
+- **Full operator guide:** `omni-engine/USAGE.md`.
+- Live runtime data under `/contacts`, `/daily`, and `out/` is git-ignored
+  (may contain PII); committed `examples/` + `samples/` show the formats.
+
 ## Conventions for agents
 
 - Each vector is a self-contained Apify actor under `omni-engine/<vector>/`

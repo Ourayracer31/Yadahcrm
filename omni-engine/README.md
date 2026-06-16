@@ -42,6 +42,7 @@ private-system access, no writes to county systems.
 | `contact-memory/` | **Relationship Intelligence System** — permanent per-contact markdown files (`/contacts/**`), append-only history, builder/landowner/investor/partner templates, daily follow-up board, Field Reality Rule | 32 passing |
 | `contracts/` | Option to Purchase + Assignment & Finder's Fee; "no Wholesale" guard | 18 passing |
 | `routing/` | **n8n / webhook routing layer** — pushes operator output + daily board to CRM dashboards; internal-only (never auto-contacts a lead) | 19 passing |
+| `runner/` | **One-command daily runner** — chains vectors → synthesis → operator → board → routing; writes all artifacts (`npm run daily`) | 12 passing |
 
 ## The four Plays (matching engine)
 
@@ -51,6 +52,20 @@ private-system access, no writes to county systems.
 | **Liquidity Bailout** | builder has 60+ day specs | route dead specs to Vector C BTR buyers | $5k / door |
 | **Capital Preservation** | builder won't risk cash on dirt | 120-day option, build-to-suit | paid at retail closing |
 | **Pipeline Drought** | heavy hitter needs subdivision space | option 15+ ac tract, assign | five-figure |
+
+## Quick start — the one-command daily runner
+
+```bash
+cd omni-engine
+npm run daily        # runs the full pipeline on bundled sample data
+npm test             # 175 tests across all modules
+```
+
+`runner/` chains it all: **vectors' output → synthesis → operator →
+contact-memory board → (optional) n8n routing**, writing the War Room,
+briefings, 30-contact plan, and `daily/travis-follow-up-board.md`. See
+[`USAGE.md`](./USAGE.md) for the full daily operating guide and
+[`runner/README.md`](./runner/README.md) for flags/config.
 
 ## Run the whole chain locally
 

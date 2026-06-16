@@ -1,0 +1,12 @@
+{
+  "name": "omni-engine",
+  "version": "0.1.0",
+  "description": "The Omni-Engine - Honest-Broker real estate matchmaking / data-broker system for the KC metro. Run `npm run daily` for the full daily pipeline.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "daily": "node runner/src/daily.js --config config/omni.config.example.json",
+    "demo": "node operator/test/demo.js",
+    "test": "node synthesis/test/synthesis.test.js && node matching/test/match.test.js && node operator/test/operator.test.js && node contracts/test/contracts.test.js && node contact-memory/test/contact-memory.test.js && node routing/test/routing.test.js && node runner/test/runner.test.js"
+  }
+}

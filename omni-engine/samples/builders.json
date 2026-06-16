@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "Squeezed Homes LLC",
+    "permitsPerYear": 12,
+    "healthStatus": "Choked (sitting inventory)",
+    "metro": "KANSAS CITY",
+    "productType": "duplex/infill",
+    "specSummary": { "activeSpecs": 5, "specsOverThreshold": 3, "priceDrops": 2, "maxPriceDropPct": 6, "medianDom": 92, "staleAddresses": ["1 A St", "2 A St", "3 A St"] }
+  },
+  {
+    "displayName": "Momentum Build Co",
+    "permitsPerYear": 18,
+    "healthStatus": "Selling out (fast absorption)",
+    "metro": "KANSAS CITY",
+    "productType": "duplex",
+    "specSummary": { "activeSpecs": 3, "specsOverThreshold": 0, "priceDrops": 0, "medianDom": 18 }
+  },
+  {
+    "displayName": "Sallee Development",
+    "permitsPerYear": 40,
+    "healthStatus": "Selling out (fast absorption)",
+    "heavyHitter": true,
+    "metro": "CASS",
+    "specSummary": { "activeSpecs": 4, "specsOverThreshold": 0, "medianDom": 22 }
+  }
+]
