@@ -22,10 +22,33 @@ export const FOLDERS = {
 // Folder routing precedence when a contact has multiple types.
 const PRIORITY = ['Builder', 'Developer', 'Landowner', 'Investor'];
 
-/** Resolve the primary type for filing. */
+// Map loose/lowercase type strings (e.g. operator memory uses "builder", "title")
+// onto the canonical CONTACT_TYPES, so filing is case- and synonym-insensitive.
+const SYNONYMS = {
+  builder: 'Builder', developer: 'Developer', landowner: 'Landowner', investor: 'Investor',
+  engineer: 'Engineer', surveyor: 'Surveyor',
+  title: 'Title Company', 'title company': 'Title Company',
+  attorney: 'Attorney', lawyer: 'Attorney',
+  banker: 'Banker/Lender', lender: 'Banker/Lender', 'banker/lender': 'Banker/Lender',
+  city: 'City/County Contact', county: 'City/County Contact', 'city/county contact': 'City/County Contact',
+  broker: 'Broker', other: 'Other',
+};
+
+/** Normalize any type string to a canonical CONTACT_TYPE. */
+export function canonicalType(t) {
+  if (!t) return null;
+  const exact = CONTACT_TYPES.find((c) => c.toLowerCase() === String(t).toLowerCase());
+  if (exact) return exact;
+  return SYNONYMS[String(t).toLowerCase().trim()] || null;
+}
+
+/** Resolve the primary type for filing (case/synonym-insensitive). */
 export function primaryTypeOf(contact) {
-  if (contact.primaryType && CONTACT_TYPES.includes(contact.primaryType)) return contact.primaryType;
-  const types = (contact.types && contact.types.length ? contact.types : [contact.type]).filter(Boolean);
+  const canonPrimary = canonicalType(contact.primaryType);
+  if (canonPrimary) return canonPrimary;
+  const types = (contact.types && contact.types.length ? contact.types : [contact.type])
+    .map(canonicalType)
+    .filter(Boolean);
   for (const t of PRIORITY) if (types.includes(t)) return t;
   return types[0] || 'Other';
 }

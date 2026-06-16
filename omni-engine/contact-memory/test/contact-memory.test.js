@@ -23,6 +23,9 @@ ok(folderForType('Investor') === 'contacts/investors', 'investor -> investors fo
 ok(fileNameFor({ name: 'Jane Heir', company: 'Heir Holdings LLC' }) === 'jane-heir-heir-holdings-llc.md', 'company filename slug');
 ok(fileNameFor({ name: 'Bob Farmer', location: 'Cass County' }) === 'bob-farmer-cass-county.md', 'location filename when no company');
 ok(pathForContact({ name: 'Acme Build', company: 'Acme', type: 'Builder' }) === 'contacts/builders-developers/acme-build-acme.md', 'full path for builder');
+ok(primaryTypeOf({ type: 'builder' }) === 'Builder', 'lowercase "builder" canonicalizes (operator memory convention)');
+ok(folderForType(primaryTypeOf({ type: 'title' })) === 'contacts/service-partners', 'lowercase "title" -> Title Company -> service-partners');
+ok(primaryTypeOf({ types: ['landowner', 'builder'] }) === 'Builder', 'lowercase multi-type priority works');
 ok(CONTACT_TYPES.includes('Title Company') && CONTACT_TYPES.includes('Banker/Lender'), 'contact types include service partners');
 
 // === builder file render + write ===
