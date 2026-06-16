@@ -56,4 +56,10 @@ ROUTE=""
 [ -n "$OMNI_WEBHOOK_DEFAULT" ] && ROUTE="--route"
 node runner/src/daily.js --config config/omni.config.example.json $ROUTE
 
+# push the morning digest to Travis's phone (console-prints if no channel set)
+if [ -f out/board.json ]; then
+  echo "→ sending digest…"
+  node notify/src/cli.js --board out/board.json || true
+fi
+
 echo "[$(date '+%Y-%m-%d %H:%M')] Done. Board: daily/travis-follow-up-board.md"
