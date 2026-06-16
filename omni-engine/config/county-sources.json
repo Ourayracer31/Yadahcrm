@@ -6,8 +6,8 @@
         "county": "Jackson (KCMO)",
         "state": "MO",
         "serviceVerified": true,
-        "queryUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/MapServer/0/query",
-        "discoverUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/MapServer/0?f=json",
+        "queryUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/FeatureServer/0/query",
+        "discoverUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/FeatureServer/0?f=json",
         "altRealEstateService": "https://gis.mijackson.org/countygis/rest/services/RealEstate/RealEstateParcels/MapServer",
         "zoningField": "VERIFY_ZONING",
         "fieldMap": {
