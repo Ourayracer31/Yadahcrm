@@ -12,6 +12,6 @@
     "log": "node conversation/src/logCall.js",
     "verify": "node tools/selftest.js",
     "verify:live": "node tools/selftest.js --live",
-    "test": "node synthesis/test/synthesis.test.js && node matching/test/match.test.js && node operator/test/operator.test.js && node contracts/test/contracts.test.js && node contact-memory/test/contact-memory.test.js && node routing/test/routing.test.js && node runner/test/runner.test.js && node conversation/test/conversation.test.js && node skiptrace/test/skiptrace.test.js && node notify/test/notify.test.js && node tools/discover.test.js && node tools/pull.test.js && node tools/autoconfig.test.js && node tools/addbuilder.test.js && node tools/selftest.js"
+    "test": "node synthesis/test/synthesis.test.js && node matching/test/match.test.js && node operator/test/operator.test.js && node contracts/test/contracts.test.js && node contact-memory/test/contact-memory.test.js && node routing/test/routing.test.js && node runner/test/runner.test.js && node conversation/test/conversation.test.js && node skiptrace/test/skiptrace.test.js && node notify/test/notify.test.js && node tools/discover.test.js && node tools/pull.test.js && node tools/autoconfig.test.js && node tools/addbuilder.test.js && node tools/pullpermits.test.js && node tools/selftest.js"
   }
 }
