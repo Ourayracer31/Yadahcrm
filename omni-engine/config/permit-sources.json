@@ -1,0 +1,20 @@
+{
+  "_about": "Vector A — scrape builders from a public building-permit feed. Find your city/county 'building permits' open-data API (KCMO: data.kcmo.org → search 'permits' → API/SODA endpoint). Replace the VERIFY_ values, then: node tools/pull-permits.js --source config/permit-sources.json --out samples/builders.json . For permit portals that need a real browser, run an Apify actor and ingest with tools/apify.js instead.",
+  "metro": "KANSAS CITY",
+  "windowMonths": 24,
+  "minPerYear": 5,
+  "maxPerYear": 50,
+  "staleDomDays": 60,
+  "permitSource": {
+    "type": "socrata",
+    "url": "https://data.kcmo.org/resource/VERIFY_DATASET_ID.json",
+    "where": "",
+    "fieldMap": {
+      "builderName": "VERIFY_CONTRACTOR_FIELD",
+      "issueDate": "VERIFY_ISSUE_DATE_FIELD",
+      "address": "VERIFY_ADDRESS_FIELD",
+      "permitType": "VERIFY_PERMIT_TYPE_FIELD"
+    }
+  },
+  "listingsSource": null
+}

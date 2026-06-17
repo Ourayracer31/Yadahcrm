@@ -1,0 +1,26 @@
+[
+  {
+    "parcelId": "INFILL1", "zoning": "R-3", "situsAddress": "123 Vine St", "situsCity": "KANSAS CITY", "county": "Jackson",
+    "ownerName": "Jane Heir", "ownerMailingState": "CA", "outOfStateOwner": true, "vacantOrTeardown": true,
+    "acreage": 0.2, "landValue": 60000, "equityProxy": 60000, "yearsHeld": 14,
+    "sewerAvailable": true, "waterAvailable": true, "access": "paved", "compsStrength": "ok"
+  },
+  {
+    "parcelId": "INFILL2", "zoning": "R-3", "situsAddress": "88 Troost Ave", "situsCity": "KANSAS CITY", "county": "Jackson",
+    "ownerName": "Holdover Trust", "ownerMailingState": "MO", "vacantOrTeardown": true,
+    "acreage": 0.18, "landValue": 55000, "equityProxy": 55000,
+    "sewerAvailable": false, "access": "gravel"
+  },
+  {
+    "parcelId": "PREMIUM1", "zoning": "R-1", "situsAddress": "9 Maple Ridge", "situsCity": "KANSAS CITY", "county": "Jackson",
+    "ownerName": "Ridge Holdings", "ownerMailingState": "MO", "vacantOrTeardown": false,
+    "acreage": 0.3, "totalAssessedValue": 250000, "equityProxy": 250000,
+    "sewerAvailable": true, "access": "paved", "compsStrength": "strong"
+  },
+  {
+    "parcelId": "TRACT1", "zoning": "AG", "situsAddress": "County Line Rd", "situsCity": "CASS", "county": "Cass",
+    "ownerName": "Out-of-State Family LP", "ownerMailingState": "FL", "outOfStateOwner": true, "vacantOrTeardown": true,
+    "acreage": 22, "landValue": 220000, "equityProxy": 220000, "yearsHeld": 30,
+    "sewerAvailable": true, "access": "paved"
+  }
+]

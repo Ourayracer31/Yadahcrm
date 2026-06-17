@@ -1,0 +1,12 @@
+{
+  "name": "vector-c-capital-sweep",
+  "version": "0.1.0",
+  "description": "Omni-Engine Vector C (Capital Sweep) - builds a Build-to-Rent buyer list from LLCs/corporate entities that bought 5+ single-family homes in the Midwest in the last 24 months.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/main.js",
+    "start:dev": "APIFY_LOCAL_STORAGE_DIR=./storage node src/main.js"
+  },
+  "dependencies": { "apify": "^3.2.6" }
+}

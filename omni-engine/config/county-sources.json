@@ -1,0 +1,50 @@
+{
+  "_about": "Real, verified ArcGIS base services for the KC-metro vectors. The base service URLs were confirmed live (June 2026). The exact LAYER INDEX and FIELD NAMES still must be read from each live service from your own network (the county servers block bots). For each source: open the `discoverUrl` in a browser (or run `node tools/discover-fields.js --url <queryUrl>`), then replace the VERIFY_* placeholders in fieldMap with the real column names.",
+  "vectorB_dirtSweep": {
+    "sources": [
+      {
+        "county": "Jackson (KCMO)",
+        "state": "MO",
+        "serviceVerified": true,
+        "fieldsVerified": true,
+        "queryUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/FeatureServer/0/query",
+        "discoverUrl": "https://gis.mijackson.org/countygis/rest/services/ParcelViewer/Parcels/FeatureServer/0?f=json",
+        "_note": "This tax layer has no ZONING field, so we target absentee (out-of-state) owners via `where`. Add KCMO city zoning as a second source later for R-3-specific infill.",
+        "zoningField": "",
+        "where": "O_STATE IS NOT NULL AND UPPER(O_STATE) NOT LIKE 'MO%'",
+        "fieldMap": {
+          "parcelId": "PIN",
+          "ownerName": "OWNER",
+          "ownerMailingAddress": "O_ADDRESS",
+          "ownerMailingCity": "O_CITY",
+          "ownerMailingState": "O_STATE",
+          "ownerMailingZip": "O_ZIP",
+          "situsAddress": "Address",
+          "situsCity": "P_CITY",
+          "landUse": "P_CLASS",
+          "acreage": "P_ACREAGE",
+          "salePrice": "Price"
+        }
+      },
+      {
+        "county": "Wyandotte (KCK)",
+        "state": "KS",
+        "serviceVerified": true,
+        "queryUrl": "https://gisweb.wycokck.org/arcgis/rest/services/GISPUB/UGMAPS_4_V02/MapServer/VERIFY_LAYER_ID/query",
+        "discoverUrl": "https://gisweb.wycokck.org/arcgis/rest/services/GISPUB/UGMAPS_4_V02/MapServer/layers?f=json",
+        "knownFields": { "parcelId": "PARCEL_NBR or PARCEL", "acreage": "ACRE", "facilityType": "FEATURECODE" },
+        "zoningField": "VERIFY_ZONING",
+        "fieldMap": {
+          "parcelId": "PARCEL_NBR",
+          "acreage": "ACRE",
+          "ownerName": "VERIFY_OWNER",
+          "ownerMailingState": "VERIFY_MAIL_STATE",
+          "situsAddress": "VERIFY_SITE_ADDRESS",
+          "landUse": "FEATURECODE",
+          "landValue": "VERIFY_LAND_VAL"
+        }
+      }
+    ],
+    "note": "Cass / Platte / Miami county services for the 10-40ac tract sweep: locate each county's ArcGIS REST parcel layer the same way, then add a source here."
+  }
+}

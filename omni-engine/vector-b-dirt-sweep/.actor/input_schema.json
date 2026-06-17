@@ -1,0 +1,139 @@
+{
+  "title": "Vector B: The Dirt Sweep - Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "sources": {
+      "title": "County data sources (ArcGIS FeatureServer/MapServer query layers)",
+      "type": "array",
+      "description": "Each entry points at a public county parcel layer's ArcGIS REST `query` endpoint and maps that layer's attribute names onto the engine's normalized fields. Ships with KC-metro defaults; verify each endpoint before a production run.",
+      "editor": "json",
+      "prefill": [
+        {
+          "county": "Jackson (KCMO)",
+          "state": "MO",
+          "queryUrl": "https://gis.jacksongov.org/arcgis/rest/services/Parcels/MapServer/0/query",
+          "zoningField": "ZONING",
+          "fieldMap": {
+            "parcelId": "PARCEL_ID",
+            "situsAddress": "SITUS_ADDR",
+            "situsCity": "SITUS_CITY",
+            "ownerName": "OWNER_NAME",
+            "ownerMailingAddress": "MAIL_ADDR",
+            "ownerMailingCity": "MAIL_CITY",
+            "ownerMailingState": "MAIL_STATE",
+            "ownerMailingZip": "MAIL_ZIP",
+            "landValue": "LAND_VALUE",
+            "improvementValue": "IMPR_VALUE",
+            "totalAssessedValue": "TOTAL_VALUE",
+            "landUse": "LAND_USE",
+            "acreage": "ACRES"
+          }
+        },
+        {
+          "county": "Wyandotte (KCK)",
+          "state": "KS",
+          "queryUrl": "https://maps.wycokck.org/arcgis/rest/services/Parcels/MapServer/0/query",
+          "zoningField": "ZONING",
+          "fieldMap": {
+            "parcelId": "PARCEL",
+            "situsAddress": "SITE_ADDRESS",
+            "situsCity": "SITE_CITY",
+            "ownerName": "OWNER",
+            "ownerMailingAddress": "MAIL_ADDRESS",
+            "ownerMailingCity": "MAIL_CITY",
+            "ownerMailingState": "MAIL_STATE",
+            "ownerMailingZip": "MAIL_ZIP",
+            "landValue": "LAND_VAL",
+            "improvementValue": "IMP_VAL",
+            "totalAssessedValue": "TOT_VAL",
+            "landUse": "LANDUSE",
+            "acreage": "ACRES"
+          }
+        }
+      ]
+    },
+    "zoningCodes": {
+      "title": "Target zoning codes (Infill / density)",
+      "type": "array",
+      "description": "Zoning codes that permit duplex / multi-family / infill density. Matched case-insensitively as a prefix so 'R-3' also catches 'R-3A'.",
+      "editor": "stringList",
+      "prefill": ["R-2.5", "R-3", "R-4", "R-2", "R-5", "MF", "MULTI-FAMILY", "DUPLEX", "TWO-FAMILY"]
+    },
+    "infillContextAreas": {
+      "title": "KCMO Infill / Residential Context Area tags",
+      "type": "array",
+      "description": "Optional overlay / context-area values (e.g. KCMO 'Infill Residential Context Area'). If a source exposes a context/overlay field, list its qualifying values here.",
+      "editor": "stringList",
+      "prefill": ["INFILL", "RESIDENTIAL CONTEXT", "RCA"]
+    },
+    "contextField": {
+      "title": "Context / overlay attribute name",
+      "type": "string",
+      "description": "Optional. The attribute that carries the context-area / overlay tag, if the source layer has one.",
+      "editor": "textfield"
+    },
+    "vacantOnly": {
+      "title": "Vacant lots / tear-downs only",
+      "type": "boolean",
+      "description": "When on, keep only parcels with no/low improvement value or a vacant/teardown land-use code (the classic infill target).",
+      "default": false
+    },
+    "teardownImprovementCeiling": {
+      "title": "Tear-down improvement-value ceiling ($)",
+      "type": "integer",
+      "description": "Parcels with an improvement value at or below this are treated as tear-down candidates even if not flagged vacant.",
+      "default": 25000
+    },
+    "vacantLandUseCodes": {
+      "title": "Vacant / tear-down land-use codes",
+      "type": "array",
+      "description": "Land-use code values that mean 'vacant' or 'tear-down' for these counties.",
+      "editor": "stringList",
+      "prefill": ["VAC", "VACANT", "0000", "1000"]
+    },
+    "outOfStateOnly": {
+      "title": "Out-of-state owners only",
+      "type": "boolean",
+      "description": "Keep only parcels whose owner mailing state is outside the parcel's home state (the high-equity, off-market signal for Target 2 tracts).",
+      "default": false
+    },
+    "minAcreage": {
+      "title": "Minimum acreage",
+      "type": "integer",
+      "description": "Lower acreage bound. Leave at 0 for infill lots. Set to 10 for the exurban tract sweep (Target 2).",
+      "default": 0
+    },
+    "maxAcreage": {
+      "title": "Maximum acreage",
+      "type": "integer",
+      "description": "Upper acreage bound. Leave at 0 for no cap. Set to 40 for the exurban tract sweep.",
+      "default": 0
+    },
+    "minEquityProxy": {
+      "title": "Minimum equity proxy ($)",
+      "type": "integer",
+      "description": "Keep only parcels whose assessed equity proxy meets this floor. 0 disables the filter.",
+      "default": 0
+    },
+    "maxRecordsPerCounty": {
+      "title": "Max records per county",
+      "type": "integer",
+      "description": "Safety cap on records pulled per source (0 = unlimited).",
+      "default": 5000
+    },
+    "pageSize": {
+      "title": "ArcGIS page size",
+      "type": "integer",
+      "description": "Records per ArcGIS request. Most servers cap at 1000-2000.",
+      "default": 1000
+    },
+    "webhookUrl": {
+      "title": "n8n / CRM webhook URL",
+      "type": "string",
+      "description": "Optional. Each qualified lead is POSTed here as JSON for routing into the CRM (Vector B handoff).",
+      "editor": "textfield"
+    }
+  },
+  "required": ["sources", "zoningCodes"]
+}

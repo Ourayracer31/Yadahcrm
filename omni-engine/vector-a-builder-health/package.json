@@ -1,0 +1,12 @@
+{
+  "name": "vector-a-builder-health",
+  "version": "0.1.0",
+  "description": "Omni-Engine Vector A (Builder Health Sweep) - identifies mid-market KC builders (5-50 permits/yr) and reads their inventory health (spec DOM, price drops) to flag who is choked vs selling out.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/main.js",
+    "start:dev": "APIFY_LOCAL_STORAGE_DIR=./storage node src/main.js"
+  },
+  "dependencies": { "apify": "^3.2.6" }
+}

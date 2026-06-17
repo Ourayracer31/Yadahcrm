@@ -1,0 +1,8 @@
+{
+  "name": "omni-engine-synthesis",
+  "version": "0.1.0",
+  "description": "Opportunity Synthesis Engine - the system never assumes opportunities are discovered; it CREATES them by intelligently combining People, Timing, Capital and Land.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": { "test": "node test/synthesis.test.js" }
+}

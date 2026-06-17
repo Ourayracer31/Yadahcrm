@@ -1,0 +1,9 @@
+{
+  "name": "omni-engine-routing",
+  "version": "0.1.0",
+  "description": "n8n / webhook routing layer - pushes operator-layer intelligence and the daily board into Travis's CRM dashboards. Internal dashboards only; never auto-contacts a lead.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": { "omni-route": "src/cli.js" },
+  "scripts": { "test": "node test/routing.test.js" }
+}

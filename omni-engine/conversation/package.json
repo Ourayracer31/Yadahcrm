@@ -1,0 +1,11 @@
+{
+  "name": "omni-engine-conversation",
+  "version": "0.1.0",
+  "description": "Conversation capture - record/transcribe/summarize a call and feed the structured result into the robot's relationship memory. Summarization on Claude; works offline with a heuristic fallback.",
+  "type": "module",
+  "bin": { "omni-log": "src/logCall.js" },
+  "scripts": { "test": "node test/conversation.test.js" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.69.0"
+  }
+}

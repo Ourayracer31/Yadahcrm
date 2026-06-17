@@ -1,0 +1,25 @@
+{
+  "contacts": [
+    {
+      "name": "Squeezed Homes LLC",
+      "type": "builder",
+      "trustLevel": 7,
+      "authority": true,
+      "builds": "duplex/infill",
+      "buildsWhere": "KCMO",
+      "conversationCount": 1,
+      "lastConversation": "2026-06-10",
+      "nextFollowUp": "2026-06-16",
+      "currentPain": "specs aging on the east side",
+      "interactions": [
+        {
+          "at": "2026-06-10",
+          "method": "Call",
+          "summary": "Intro at supply yard; talked east-side pipeline",
+          "painLearned": "3 specs aging, short on finished lots",
+          "nextAction": "Watch for east-side R-3 dirt"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "omni-engine-skiptrace",
+  "version": "0.1.0",
+  "description": "Skip-trace enrichment - turn a parcel owner + mailing address into phone/email via a configurable, licensed data provider. Cached, rate-limited, human-call-only. Feeds the contact memory so Travis has a number to call.",
+  "type": "module",
+  "bin": { "omni-skiptrace": "src/cli.js" },
+  "scripts": { "test": "node test/skiptrace.test.js" }
+}

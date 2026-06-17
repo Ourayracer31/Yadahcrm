@@ -1,0 +1,12 @@
+{
+  "name": "omni-engine-contact-memory",
+  "version": "0.1.0",
+  "description": "Contact Memory + Relationship Intelligence System - a permanent markdown memory file per contact, append-only conversation history, and a daily follow-up board. Built for development problem-solving, not spam.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": { "omni-contacts": "src/cli.js" },
+  "scripts": {
+    "test": "node test/contact-memory.test.js",
+    "examples": "node test/make-examples.js"
+  }
+}

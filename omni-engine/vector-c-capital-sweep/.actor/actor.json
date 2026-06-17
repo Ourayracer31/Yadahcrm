@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "name": "vector-c-capital-sweep",
+  "title": "Omni-Engine | Vector C: Capital Sweep",
+  "description": "Builds a Build-to-Rent buyer list: corporate entities that bought 5+ single-family homes in the trailing 24 months, from public assessor/recorder data.",
+  "version": "0.1",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "title": "BTR buyer list",
+      "views": {
+        "buyers": {
+          "title": "BTR buyers",
+          "transformation": {
+            "fields": ["displayName", "county", "totalHoldings", "recentAcquisitions", "mailingState", "mailingAddress", "buyerProfile"]
+          },
+          "display": { "component": "table" }
+        }
+      }
+    }
+  }
+}

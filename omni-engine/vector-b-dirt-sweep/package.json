@@ -1,0 +1,16 @@
+{
+  "name": "vector-b-dirt-sweep",
+  "version": "0.1.0",
+  "description": "Omni-Engine Vector B (The Dirt Sweep) - Apify actor that pulls county tax/parcel records for multi-family-zoned infill lots and density-eligible acreage tracts in the Kansas City metro.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/main.js",
+    "start:dev": "APIFY_LOCAL_STORAGE_DIR=./storage node src/main.js"
+  },
+  "dependencies": {
+    "apify": "^3.2.6"
+  }
+}

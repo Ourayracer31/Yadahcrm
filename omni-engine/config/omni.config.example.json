@@ -1,0 +1,20 @@
+{
+  "_comment": "Daily runner config. Paths are relative to THIS file's directory. Copy to omni.config.json and edit. Run: node ../runner/src/daily.js --config ./omni.config.json",
+  "inputs": {
+    "builders": "../samples/builders.json",
+    "lots": "../samples/lots.json",
+    "buyers": "../samples/buyers.json"
+  },
+  "memory": "../samples/crm.json",
+  "out": "../out",
+  "root": "..",
+  "route": false,
+  "minComposite": 0,
+  "endpoints": {
+    "default": "https://YOUR-N8N-HOST/webhook/omni",
+    "highPriority": "https://YOUR-N8N-HOST/webhook/omni-hot",
+    "newMatches": "https://YOUR-N8N-HOST/webhook/omni-new",
+    "dealsToKill": "https://YOUR-N8N-HOST/webhook/omni-kill",
+    "dailyDigest": "https://YOUR-N8N-HOST/webhook/omni-digest"
+  }
+}

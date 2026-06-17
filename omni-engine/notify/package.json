@@ -1,0 +1,8 @@
+{
+  "name": "omni-engine-notify",
+  "version": "0.1.0",
+  "description": "Morning digest to Travis's phone - the board's first call (with the number), top contacts, and deals-to-kill, pushed via Telegram / Slack / generic webhook. To the operator only; never to a lead.",
+  "type": "module",
+  "bin": { "omni-notify": "src/cli.js" },
+  "scripts": { "test": "node test/notify.test.js" }
+}

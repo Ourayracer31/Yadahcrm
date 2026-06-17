@@ -1,0 +1,10 @@
+{
+  "name": "omni-engine-matching",
+  "version": "0.1.0",
+  "description": "Pain-Point matching engine - routes Vector A (builders), Vector B (dirt) and Vector C (BTR buyers) leads into the four strategic Plays.",
+  "type": "module",
+  "main": "src/match.js",
+  "scripts": {
+    "test": "node test/match.test.js"
+  }
+}
